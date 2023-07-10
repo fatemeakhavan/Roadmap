@@ -1,0 +1,15 @@
+.style-hover:hover{
+    border: 1px solid #9C27B0;
+
+}
+.style-table-hover{
+    border-right: 3px solid #fff;
+}
+.style-table-hover:hover{
+    border-right: 3px solid #9C27B0;
+
+
+}
+.style-card-hover:hover{
+    box-shadow: 2px 2px 2px 2px #EA8DFC;
+}
