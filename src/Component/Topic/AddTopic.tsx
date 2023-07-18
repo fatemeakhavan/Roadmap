@@ -1,25 +1,29 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useAddTopic} from '../../../Hook/Topic/useAddTopic';
-import {ITopic} from "../../../Interface/Topic.interface";
-import {Box, Button, Dialog, MenuItem, Select, TextField} from "@mui/material";
+import {useAddTopic} from '../../Hook/Topic/useAddTopic';
+import {ITopic} from "../../Interface/Topic.interface";
+import {Box, Button, Dialog,TextField} from "@mui/material";
 import {useParams} from "react-router-dom";
 
 
 interface IProps{
     handleClose: () => void;
+    topic:ITopic | null;
 }
 
 export const AddTopic = (props:IProps) => {
-    const{handleClose}=props;
+    const{handleClose,topic}=props;
     const{courseId}=useParams();
 
     const schema=yup.object().shape({
-        description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
         name:yup.string().required("نوشتن نام دوره آموزشی الزامی است"),
-        newTopic:yup.boolean().required("پر کردن این فیلد الزامی است"),
+        description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
         group:yup.string().required("نوشتن گروه الزامی است"),
+        newTopic:yup.boolean().required("پر کردن این فیلد الزامی است"),
+        level:yup.number().required("نوشتن سطح آن الزامی است"),
+        order:yup.number().required("نوشتن آن الزامی است"),
+
     });
 
 
@@ -32,12 +36,14 @@ export const AddTopic = (props:IProps) => {
 
     const onSubmit: SubmitHandler<ITopic> = data => {
         addTopicHook.mutate({
-                description: data.description,
-                 group:data.group,
                 name: data.name,
+                description: data.description,
+                group:data.group,
                 newTopic:data.newTopic,
-                type:data.type!,
                 course_id:courseId!,
+                level:data.level,
+                order:data.order,
+                parent_id:topic?.id,
                 callBack:handleClose
             }
 
@@ -94,23 +100,6 @@ export const AddTopic = (props:IProps) => {
                     />
                     {errors.newTopic && (<p>{errors.newTopic.message}</p>)}
                     <Controller
-                        name="type"
-                        control={control}
-                        render={({ field }) => <Select sx={{marginBottom:"30px"}}
-                                                       labelId="demo-simple-select-label"
-                                                       label="type"
-                                                       id="demo-simple-select"
-                                                       fullWidth
-                        >
-
-                            <MenuItem value={"MAIN"}>MAIN</MenuItem>
-                            <MenuItem value={"DETAIL"}>DETAIL</MenuItem>
-
-                        </Select>}
-                    />
-                    {errors.type && (<p>{errors.type.message}</p>)}
-
-                    <Controller
                         name="group"
                         control={control}
                         render={({ field }) =>  <TextField
@@ -123,6 +112,33 @@ export const AddTopic = (props:IProps) => {
                         />}
                     />
                     {errors.group && (<p>{errors.group.message}</p>)}
+                    <Controller
+                        name="level"
+                        control={control}
+                        render={({ field }) =>  <TextField
+                            sx={{display:"block", marginBottom:"50px"}}
+                            id="outlined-basic"
+                            label="group"
+                            variant="outlined"
+                            multiline
+                            {...field}
+                        />}
+                    />
+                    {errors.level && (<p>{errors.level.message}</p>)}
+                    <Controller
+                        name="order"
+                        control={control}
+                        render={({ field }) =>  <TextField
+                            sx={{display:"block", marginBottom:"50px"}}
+                            id="outlined-basic"
+                            label="group"
+                            variant="outlined"
+                            multiline
+                            {...field}
+                        />}
+                    />
+                    {errors.order && (<p>{errors.order.message}</p>)}
+
                     <Button type="submit" variant="outlined" color="success">ثبت کردن</Button>
                     <Button
                         onClick={handleClose}

@@ -2,9 +2,9 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
-import {ITopic} from '../../Interface/Topic.interface';
+import {ITopic} from '../../../Interface/Topic.interface';
 import { Typography } from '@mui/material';
-import {UserTopic} from "./UserTopic/UserTopic";
+import {UserTopic} from "./UserTopic";
 
 interface IProps{
     handleClose: () => void;

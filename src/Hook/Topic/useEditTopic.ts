@@ -8,14 +8,14 @@ import { ITopic } from '../../Interface/Topic.interface';
 export const useEditTopic=()=> {
     const key = 'editTopic';
     return useMutation(
-        async (values: { description: string; group: string;  name: string; newTopic: boolean; course_id:string; type: "MAIN" | "DETAIL"; topicId:number | undefined; callBack?: () => void }) => {
+        async (values: {description: string; name: string; group: string; newTopic: boolean;  level:number;  course_id:string; order:number; parent_id: number; topicId:number | undefined; callBack?: () => void }) => {
 
-            const { description,group,name,newTopic,type, topicId,course_id } = values;
+            const {description,name,group,newTopic,level,course_id,order,parent_id,topicId} = values;
             console.log(values)
             return await RoadmapsQuery<ITopic>({
                 url: `/api/topics/${topicId}`,
                 method: ERequest.PATCH,
-                data: {description,group,name,newTopic,type ,course_id},
+                data: {description,name,group,newTopic,level,course_id,order,parent_id},
             });
         },
         {

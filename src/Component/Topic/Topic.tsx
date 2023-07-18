@@ -6,14 +6,13 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Paper from '@mui/material/Paper';
 import React, {useMemo, useState} from "react";
-import {DescriptionTopic} from "./DescriptionTopic";
+import {DescriptionTopic} from "../Topic/UserTopic/DescriptionTopic";
 import {DeleteTopic} from "./DeleteTopic";
-import {EditTopic} from "../Topic/UserTopic/EditTopic";
+import {EditTopic} from "../Topic/EditTopic";
 import "../styles.css";
 import AddIcon from "@mui/icons-material/Add";
 import {useGetCourse} from "../../Hook/Course/useCourse";
-import {ICourse} from "../../Interface/Course.interface";
-import {AddTopic} from "./UserTopic/AddTopic";
+import {AddTopic} from "../Topic/AddTopic";
 
 
 export const Topic=()=>{
@@ -21,24 +20,22 @@ export const Topic=()=>{
     const [descriptionTopics, setDescriptionTopics] = useState<ITopic | null>(null);
     const [deleteTopic, setDeleteTopic] = useState<ITopic | null>(null);
     const [editTopic, setEditTopic] = useState<ITopic | null>(null);
-    const [addTopic, setAddTopic] = useState<ITopic[]| null>(null);
+    const [addTopic, setAddTopic] = useState<ITopic| null>(null);
+    const [topic,setTopic]=useState<ITopic | null >(null);
     const{courseId}=useParams();
-    const listCourseHook=useGetCourse();
-
-
-    let courses: ICourse[] = [];
-    if (listCourseHook.data?.length) {
-        courses = listCourseHook.data;
-    }
-
     const getTopicHook = useGetTopic(courseId);
-
     const[searchName,setSearchName]=useState<string>("");
+
 
     let topics: ITopic[] = [];
     if (getTopicHook.data?.length) {
         topics= getTopicHook.data;
     }
+
+    {topics.map((topic)=>(
+        setTopic(topic)
+    ))}
+
     const handleDeleteClose = () => {
         setDeleteTopic(null);
         getTopicHook.refetch();
@@ -77,7 +74,7 @@ export const Topic=()=>{
                     onChange={handleInputChange}
                 />
                 <Fab size="medium" color="success" sx={{marginLeft:"1240px"}}>
-                        <AddIcon onClick={() => setAddTopic( topics)}/>
+                        <AddIcon onClick={() => setAddTopic(topic)}/>
                 </Fab>
 
             </form>
@@ -91,7 +88,6 @@ export const Topic=()=>{
                                         <TableCell align="left" sx={{fontSize:"25px",backgroundColor:"#009688"}}>Name</TableCell>
                                         <TableCell align="left" sx={{fontSize:"25px",backgroundColor:"#B2DFDB"}}>Group</TableCell>
                                         <TableCell align="left" sx={{fontSize:"25px",backgroundColor:"#E1BEE7"}}>NewTopic</TableCell>
-                                        <TableCell align="left" sx={{fontSize:"25px",backgroundColor:"#F8BBD0"}}>Type</TableCell>
                                         <TableCell align="left" sx={{fontSize:"25px",backgroundColor:"#F9D1D1"}}>Action</TableCell>
 
                                     </TableRow>
@@ -102,7 +98,6 @@ export const Topic=()=>{
                                             <TableCell align="left" onClick={() => setDescriptionTopics(topic)} >{topic.name} </TableCell>
                                             <TableCell align="left" onClick={() => setDescriptionTopics(topic)} >{topic.group}</TableCell>
                                             <TableCell align="left" onClick={() => setDescriptionTopics(topic)} >{topic.newTopic}</TableCell>
-                                            <TableCell align="left" onClick={() => setDescriptionTopics(topic)} >{topic.type}</TableCell>
                                             <TableCell align="left" >
                                                 <IconButton >
                                                     <DeleteForeverIcon style={{color:"#CD1818", marginLeft:"20px"}} onClick={() => setDeleteTopic(topic)}/>
@@ -135,7 +130,7 @@ export const Topic=()=>{
             {descriptionTopics ? <DescriptionTopic topic1={descriptionTopics} handleClose={() => setDescriptionTopics(null)} /> : null}
             {deleteTopic ? <DeleteTopic topic2={deleteTopic} handleClose={handleDeleteClose} /> : null}
             {editTopic ? <EditTopic topic={editTopic} handleClose={handleEditClose} /> : null}
-            {addTopic ? <AddTopic  handleClose={handleAddClose} /> : null}
+            {addTopic ? <AddTopic topic={topic} handleClose={handleAddClose} /> : null}
 
         </>
 

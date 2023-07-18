@@ -17,8 +17,12 @@ import{createTheme} from "@mui/material";
             main:"#009688"
 
          },
-         warning:{
+         error:{
             main:"#CD1818"
+         },
+         warning:{
+            main:"#FF5722"
+
          }
 
 

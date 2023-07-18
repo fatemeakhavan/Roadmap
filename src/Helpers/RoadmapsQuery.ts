@@ -38,8 +38,7 @@ const RoadmapsQuery = async <T>(FetchConfig: {
         if (expireTime && +new Date() - parseInt(expireTime) > 800000) {
             await RefreshToken();
         }
-        const authorization = 'Bearer test';
-        // const authorization = 'Bearer ' + window.localStorage.getItem('POD_APP:ACCESS_TOKEN');
+        const authorization = 'Bearer ' + window.localStorage.getItem('POD_APP:ACCESS_TOKEN');
         // localStorage.setItem('POD_APP:ACCESS_TOKEN', data?.token)
         const request: AxiosRequestConfig = {
             method: FetchConfig.method,

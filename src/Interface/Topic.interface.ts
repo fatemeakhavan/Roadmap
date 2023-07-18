@@ -1,10 +1,13 @@
 export interface ITopic{
     course_id?: number;
-    description: string;
-    group: string;
-    id?: number;
     name: string;
+    description: string;
     newTopic: boolean;
+    group: string;
+    level:number;
+    order:number;
     parent_id?: number;
-    type?: "MAIN" | "DETAIL";
+    id?: number;
 }
+
+

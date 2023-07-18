@@ -1,8 +1,8 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useEditTopic} from '../../../Hook/Topic/useEditTopic';
-import {ITopic} from "../../../Interface/Topic.interface";
+import {useEditTopic} from '../../Hook/Topic/useEditTopic';
+import {ITopic} from "../../Interface/Topic.interface";
 import {Box, Button, Dialog, MenuItem, Select, TextField} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
@@ -20,10 +20,12 @@ export const EditTopic = (props:IProps) => {
     const{courseId}=useParams();
 
     const schema=yup.object().shape({
-        description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
         name:yup.string().required("نوشتن نام دوره آموزشی الزامی است"),
-        newTopic:yup.boolean().required("پر کردن این فیلد الزامی است"),
+        description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
         group:yup.string().required("نوشتن گروه الزامی است"),
+        newTopic:yup.boolean().required("پر کردن این فیلد الزامی است"),
+        level:yup.number().required("نوشتن سطح آن الزامی است"),
+        order:yup.number().required("نوشتن آن الزامی است"),
     });
 
     const[data, setData] = useState<ITopic>({
@@ -34,8 +36,10 @@ export const EditTopic = (props:IProps) => {
         name: topic.name,
         newTopic:topic.newTopic,
         parent_id:0,
-        type: topic.type,
+        level:topic.level,
+        order:topic.order,
     });
+    ;
 
     const { control, handleSubmit,formState:{errors}, setValue } = useForm<ITopic>({
         resolver:yupResolver(schema)
@@ -51,7 +55,11 @@ export const EditTopic = (props:IProps) => {
         setValue("name", data?.name)
         setValue("group",data?.group)
         setValue("newTopic",data?.newTopic)
-        setValue("type",data?.type)
+        setValue("level",data?.level)
+        setValue("order",data?.order)
+
+
+
 
     }, [topics])
 
@@ -66,8 +74,10 @@ export const EditTopic = (props:IProps) => {
                 name: data.name,
                 group:data.group,
                 newTopic:data.newTopic,
-                type:data.type,
                 course_id:courseId!,
+                parent_id:topic.id,
+                level:data.level,
+                order:data.order,
                 callBack:handleClose
             });
     };
@@ -108,24 +118,6 @@ export const EditTopic = (props:IProps) => {
                     />
                     {errors.description&& (<p>{errors.description.message}</p>)}
                     <Controller
-                        name="type"
-                        control={control}
-                        render={({ field }) => <Select sx={{marginBottom:"30px"}}
-                                                       labelId="demo-simple-select-label"
-                                                       id="demo-simple-select"
-                                                       fullWidth
-                                                       defaultValue={data?.type}
-                                                       {...field}
-                        >
-
-                            <MenuItem value={"MAIN"}>MAIN</MenuItem>
-                            <MenuItem value={"DETAIL"}>DETAIL</MenuItem>
-
-                        </Select>}
-                    />
-                    {errors.type && (<p>{errors.type.message}</p>)}
-
-                    <Controller
                         name="group"
                         control={control}
                         render={({ field }) => <TextField
@@ -153,7 +145,33 @@ export const EditTopic = (props:IProps) => {
                     />
                     {errors.newTopic && (<p>{errors.newTopic.message}</p>)}
 
+                    <Controller
+                        name="level"
+                        control={control}
+                        render={({ field }) =>  <TextField
+                            sx={{display:"block", marginBottom:"30px"}}
+                            id="outlined-basic"
+                            variant="outlined"
+                            multiline
+                            defaultValue={data?.newTopic}
+                            {...field}
+                        />}
+                    />
+                    {errors.level && (<p>{errors.level.message}</p>)}
 
+                    <Controller
+                        name="order"
+                        control={control}
+                        render={({ field }) =>  <TextField
+                            sx={{display:"block", marginBottom:"30px"}}
+                            id="outlined-basic"
+                            variant="outlined"
+                            multiline
+                            defaultValue={data?.newTopic}
+                            {...field}
+                        />}
+                    />
+                    {errors.order && (<p>{errors.order.message}</p>)}
 
                     <Button type="submit" variant="outlined" color="success">ویرایش کردن</Button>
                     <Button

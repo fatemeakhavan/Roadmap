@@ -3,24 +3,23 @@ import { ERequest } from '../../Enum/App.enums';
 import { queryClient } from '../../App';
 import { toast } from 'react-toastify';
 import RoadmapsQuery from '../../Helpers/RoadmapsQuery';
-import { ITopic} from '../../Interface/Topic.interface';
+import { IRole } from '../../Interface/Role.interface';
 
-export const useAddTopic=() =>{
-    const key = 'addTopic';
+export const useAddRole=() =>{
+    const key = 'addRole';
     return useMutation(
-        async (values: {description: string; name: string; group: string; newTopic: boolean;  level:number;  course_id:string; order:number; parent_id: number | undefined; callBack?: () => void }) => {
-
-            const {description,name,group,newTopic,level,course_id,order,parent_id} = values;
-            return await RoadmapsQuery<ITopic>({
-                url: `/api/topics`,
+        async (values: {description: string; name:string; callBack?: () => void }) => {
+            const {description,name} = values;
+            return await RoadmapsQuery< IRole >({
+                url: `/api/roles`,
                 method: ERequest.POST,
-                data: {description,name,group,newTopic,level,course_id,order,parent_id},
+                data: { description,name},
             });
         },
         {
             onMutate: (values) => {},
             onSuccess: (result, values) => {
-                toast.success(`موضوع دوره آموزشی با موفقیت اضافه شد.`);
+                toast.success(`نقش جدید با موفقیت اضافه گردید.`);
                 if (values.callBack) {
                     values.callBack();
                 }
@@ -30,7 +29,6 @@ export const useAddTopic=() =>{
             },
             onError: (error, values, rollback) => {
                 console.error(error);
-
             },
         },
     );
