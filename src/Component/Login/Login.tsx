@@ -13,7 +13,7 @@ export const Login=()=>{
         try {
             setLoading(true);
             const response = await Fetch({
-                url: "http://192.168.221.54:8080/api/pod/login",
+                url: "http://192.168.220.147:8080/api/pod/login",
                 method: ERequest.GET,
 
             });
@@ -29,7 +29,7 @@ export const Login=()=>{
                 refresh_token: string;
                 expire_in:number;
             }>({
-                url: "http://192.168.221.54:8080/api/pod/getCode",
+                url: "http://192.168.220.147:8080/api/pod/getCode",
                 method: ERequest.GET,
                 params: {
                     code: code,

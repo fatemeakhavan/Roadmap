@@ -6,8 +6,9 @@ export interface ITopic{
     group: string;
     level:number;
     order:number;
-    parent_id?: number;
     id?: number;
 }
 
-
+export interface ITopicAdd extends ITopic {
+    parent_id: number
+}

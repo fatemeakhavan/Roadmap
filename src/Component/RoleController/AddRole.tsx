@@ -5,8 +5,6 @@ import {IRole} from "../../Interface/Role.interface";
 import {Box, Button, Dialog,TextField} from "@mui/material";
 import {useAddRole} from "../../Hook/RoleController/useAddRole";
 
-
-
 interface IProps{
     handleClose: () => void;
 }

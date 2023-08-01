@@ -3,22 +3,21 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {IUserTopic} from "../../../Interface/UserTopix.interface";
-import {ITopic} from "../../../Interface/Topic.interface";
-import {useUserGetTopic} from "../../../Hook/Topic/UserTopic/usGetUserTopic";
-import {useAddUserTopic} from "../../../Hook/Topic/UserTopic/useAddUserTopic";
-import {useUpdateUserTopic} from "../../../Hook/Topic/UserTopic/usePatchUserTopic";
+import Select from '@mui/material/Select';
+import {IUserTopic} from "../../Interface/UserTopix.interface";
+import {useUserGetTopic} from "../../Hook/UserTopic/usGetUserTopic";
+import {useAddUserTopic} from "../../Hook/UserTopic/useAddUserTopic";
+import {useUpdateUserTopic} from "../../Hook/UserTopic/useEditUserTopic";
 import {useEffect} from "react";
 
 interface IProps{
-   topicId : ITopic;
+   topicId : number;
 }
 
 export const UserTopic=(props:IProps)=> {
     const{topicId}=props;
 
-    const getUserTopicHook= useUserGetTopic(topicId.id);
+    const getUserTopicHook= useUserGetTopic(topicId);
     let userTopic: IUserTopic | undefined;
     if (getUserTopicHook.data) {
         userTopic= getUserTopicHook.data;
@@ -41,7 +40,7 @@ export const UserTopic=(props:IProps)=> {
         if(!userTopic?.status){
 
             addUserTopicHook.mutate({
-                topic_id:topicId.id,
+                topic_id:topicId,
                 user_id:1,
                 status:event.target.value,
             });
@@ -49,7 +48,7 @@ export const UserTopic=(props:IProps)=> {
 
         else{
             patchUserTopicHook.mutate({
-                topic_id:topicId.id,
+                topic_id:topicId,
                 user_id:1,
                 status:event.target.value,
             });

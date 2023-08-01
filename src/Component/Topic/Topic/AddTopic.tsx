@@ -1,85 +1,53 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useEditTopic} from '../../Hook/Topic/useEditTopic';
-import {ITopic} from "../../Interface/Topic.interface";
-import {Box, Button, Dialog, MenuItem, Select, TextField} from "@mui/material";
-import {useEffect, useState} from "react";
+import {useAddTopic} from '../../../Hook/Topic/useAddTopic';
+import {ITopicAdd} from "../../../Interface/Topic.interface";
+import {Box, Button, Dialog,TextField} from "@mui/material";
 import {useParams} from "react-router-dom";
 
-interface IProps{
-    topic:ITopic;
-    handleClose: () => void;
 
+interface IProps{
+    handleClose: () => void;
 }
 
-export const EditTopic = (props:IProps) => {
-
-    const{topic,handleClose}=props;
-    const[topics,setTopics]=useState<ITopic>(topic);
+export const AddTopic = (props:IProps) => {
+    const{handleClose}=props;
     const{courseId}=useParams();
 
     const schema=yup.object().shape({
         name:yup.string().required("نوشتن نام دوره آموزشی الزامی است"),
-        description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
+        description:yup.string().required("نوشتن توضیحات الزامی می باشد."),
         group:yup.string().required("نوشتن گروه الزامی است"),
         newTopic:yup.boolean().required("پر کردن این فیلد الزامی است"),
         level:yup.number().required("نوشتن سطح آن الزامی است"),
         order:yup.number().required("نوشتن آن الزامی است"),
+        parent_id:yup.number().required("نوشتن آن الزامی میباشد")
+
     });
 
-    const[data, setData] = useState<ITopic>({
-        course_id:0,
-        description: topic.description,
-        group: topic.group,
-        id: 0,
-        name: topic.name,
-        newTopic:topic.newTopic,
-        parent_id:0,
-        level:topic.level,
-        order:topic.order,
-    });
-    ;
 
-    const { control, handleSubmit,formState:{errors}, setValue } = useForm<ITopic>({
+    const {control, handleSubmit,formState:{errors} } = useForm<ITopicAdd>({
+        defaultValues:{},
         resolver:yupResolver(schema)
-    })
-
-    const editTopicHook = useEditTopic();
-
-    useEffect(() => {
-        if(topics) {
-            setData(topics);
-        }
-        setValue("description", data?.description)
-        setValue("name", data?.name)
-        setValue("group",data?.group)
-        setValue("newTopic",data?.newTopic)
-        setValue("level",data?.level)
-        setValue("order",data?.order)
+    });
+    const addTopicHook =useAddTopic();
 
 
-
-
-    }, [topics])
-
-
-    const onSubmit: SubmitHandler<any> = data => {
-        console.log('topic', topic);
-        console.log('data', data);
-        if(topic.id)
-            editTopicHook.mutate({
-                topicId:topic.id,
-                description: data.description,
+    const onSubmit: SubmitHandler<ITopicAdd> = data => {
+        addTopicHook.mutate({
                 name: data.name,
+                description: data.description,
                 group:data.group,
                 newTopic:data.newTopic,
                 course_id:courseId!,
-                parent_id:topic.id,
                 level:data.level,
                 order:data.order,
+                parent_id:data.parent_id,
                 callBack:handleClose
-            });
+            }
+
+        );
     };
     return (
         <Dialog open={true}
@@ -89,91 +57,103 @@ export const EditTopic = (props:IProps) => {
             <Box sx={{display:"flex", justifyContent:"center",padding:"40px 150px"}}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <h4 style={{color:"#009688"}}>آپدیت دوره آموزشی </h4>
+                    <h4 style={{color:"#009688"}}>افزودن دوره آموزشی </h4>
                     <Controller
+
                         name="name"
                         control={control}
-                        render={({ field}) =>   <TextField
+                        render={({ field }) =>   <TextField
                             sx={{display:"block", marginBottom:"30px", marginTop:"50px"}}
+                            hiddenLabel
                             id="outlined-basic"
+                            label="name"
                             variant="outlined"
                             multiline
-                            defaultValue={data?.name}
                             {...field}
                         />}
                     />
                     {errors.name && (<p>{errors.name.message}</p>)}
-
                     <Controller
                         name="description"
                         control={control}
                         render={({ field }) =>      <TextField
-                            sx={{display:"block",marginBottom:"30px"}}
-                            id="outlined-basic"
-                            variant="outlined"
-                            multiline
-                            defaultValue={data?.description}
-                            {...field}
-                        />}
-                    />
-                    {errors.description&& (<p>{errors.description.message}</p>)}
-                    <Controller
-                        name="group"
-                        control={control}
-                        render={({ field }) => <TextField
                             sx={{display:"block", marginBottom:"30px"}}
                             id="outlined-basic"
+                            label="description"
                             variant="outlined"
                             multiline
-                            defaultValue={data?.group}
                             {...field}
                         />}
                     />
-                    {errors.group && (<p>{errors.group.message}</p>)}
-
+                    {errors.description && (<p>{errors.description.message}</p>)}
                     <Controller
                         name="newTopic"
                         control={control}
-                        render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                        render={({ field }) => <TextField
+                            sx={{display:"block",marginBottom:"30px"}}
                             id="outlined-basic"
+                            label="newTopic"
                             variant="outlined"
                             multiline
-                            defaultValue={data?.newTopic}
                             {...field}
                         />}
                     />
                     {errors.newTopic && (<p>{errors.newTopic.message}</p>)}
-
+                    <Controller
+                        name="group"
+                        control={control}
+                        render={({ field }) =>  <TextField
+                            sx={{display:"block", marginBottom:"50px"}}
+                            id="outlined-basic"
+                            label="group"
+                            variant="outlined"
+                            multiline
+                            {...field}
+                        />}
+                    />
+                    {errors.group && (<p>{errors.group.message}</p>)}
                     <Controller
                         name="level"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                            sx={{display:"block", marginBottom:"50px"}}
                             id="outlined-basic"
+                            label="level"
                             variant="outlined"
                             multiline
-                            defaultValue={data?.newTopic}
                             {...field}
                         />}
                     />
                     {errors.level && (<p>{errors.level.message}</p>)}
-
                     <Controller
                         name="order"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                            sx={{display:"block", marginBottom:"50px"}}
                             id="outlined-basic"
+                            label="order"
                             variant="outlined"
                             multiline
-                            defaultValue={data?.newTopic}
                             {...field}
                         />}
                     />
                     {errors.order && (<p>{errors.order.message}</p>)}
+                    <Controller
+                        name="parent_id"
+                        control={control}
+                        render={({ field }) =>  <TextField
+                            sx={{display:"block", marginBottom:"30px"}}
+                            id="outlined-basic"
+                            label="parent_id"
+                            variant="outlined"
+                            multiline
+                            {...field}
+                        />}
+                    />
+                    {errors.parent_id && (<p>{errors.parent_id.message}</p>)}
 
-                    <Button type="submit" variant="outlined" color="success">ویرایش کردن</Button>
+
+                    <Button type="submit" variant="outlined" color="success">ثبت کردن</Button>
                     <Button
                         onClick={handleClose}
                         color="warning"
@@ -182,8 +162,9 @@ export const EditTopic = (props:IProps) => {
                     >
                         منصرف شدن
                     </Button>
-
                 </form>
             </Box>
         </Dialog>
+
+
     )};

@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
-import { ERequest } from '../../../Enum/App.enums';
-import { IRoadmapResult } from "../../../Interface/RoadmapResult.interface";
-import RoadmapsQuery from '../../../Helpers/RoadmapsQuery'
-import { IUserTopic} from '../../../Interface/UserTopix.interface';
+import { ERequest } from '../../Enum/App.enums';
+import { IRoadmapResult } from "../../Interface/RoadmapResult.interface";
+import RoadmapsQuery from '../../Helpers/RoadmapsQuery'
+import { IUserTopic} from '../../Interface/UserTopix.interface';
 
 export const useUserGetTopic=(topic_id: number | undefined) => {
     return useQuery(

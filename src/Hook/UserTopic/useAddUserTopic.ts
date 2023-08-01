@@ -1,9 +1,9 @@
 import { useMutation } from 'react-query';
-import { ERequest } from '../../../Enum/App.enums';
-import { queryClient } from '../../../App';
+import { ERequest } from '../../Enum/App.enums';
+import { queryClient } from '../../App';
 import { toast } from 'react-toastify';
-import RoadmapsQuery from '../../../Helpers/RoadmapsQuery';
-import { IUserTopic } from '../../../Interface/UserTopix.interface';
+import RoadmapsQuery from '../../Helpers/RoadmapsQuery';
+import { IUserTopic } from '../../Interface/UserTopix.interface';
 
 export const useAddUserTopic=()=> {
     const key = 'addUserTopic';

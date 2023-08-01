@@ -1,20 +1,19 @@
-import {ITopic} from "../../Interface/Topic.interface";
-import {useDeleteTopic} from "../../Hook/Topic/useDeleteTopic";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import React from "react";
+import {useDeleteComment} from "../../Hook/Comment/useDeleteComment";
 
 interface IProps{
     handleClose: () => void;
-    topic2:ITopic;
+    id:number;
 }
-export const DeleteTopic=(props:IProps)=>{
-    const{topic2, handleClose}=props;
+export const DeleteComment=(props:IProps)=>{
 
-    const deleteTopicHook=useDeleteTopic();
+    const{id, handleClose}=props;
+    const deleteCommentHook=useDeleteComment();
 
-    const deleteTopic= () => {
-        deleteTopicHook.mutate({ topicId: topic2.id, callBack: handleClose });
+    const deleteComment= () => {
+        deleteCommentHook.mutate({ id: id ,callBack: handleClose });
     };
 
     return(
@@ -31,12 +30,12 @@ export const DeleteTopic=(props:IProps)=>{
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        آیا مطمعن به حذف این آیتم هستید؟
+                        آیا مطمعن به حذف این نظر هستید؟
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} >انصراف</Button>
-                    <Button onClick={deleteTopic} sx={{color:"red"}}>حذف</Button>
+                    <Button onClick={deleteComment} sx={{color:"red"}}>حذف</Button>
                 </DialogActions>
             </Dialog>
 

@@ -43,8 +43,6 @@ export const EditRole = (props:IProps) => {
 
 
     const onSubmit: SubmitHandler<any> = data => {
-        console.log('topic', role);
-        console.log('data',role);
         if(role.id)
             editRoleHook.mutate({
                 roleId:role.id,

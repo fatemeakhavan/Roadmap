@@ -3,25 +3,25 @@ import { ERequest } from '../../Enum/App.enums';
 import { queryClient } from '../../App';
 import { toast } from 'react-toastify';
 import RoadmapsQuery from '../../Helpers/RoadmapsQuery';
-import { ITopic } from '../../Interface/Topic.interface';
+import {IComment} from "../../Interface/Comment.interface";
 
-export const useEditTopic=()=> {
-    const key = 'editTopic';
+export const useEditComment=()=> {
+    const key = 'editComment';
     return useMutation(
-        async (values: {description: string; name: string; group: string; newTopic: boolean;  level:number;  course_id:string | undefined; order:number;  topicId:number | undefined; callBack?: () => void }) => {
+        async (values: {context:string; id:number; callBack?: () => void }) => {
 
-            const {description,name,group,newTopic,level,course_id,order,topicId} = values;
+            const {context,id} = values;
             console.log(values)
-            return await RoadmapsQuery<ITopic>({
-                url: `/api/topics/${topicId}`,
+            return await RoadmapsQuery<IComment>({
+                url: `/api/comments/${id}`,
                 method: ERequest.PATCH,
-                data: {description,name,group,newTopic,level,course_id,order},
+                data: {context},
             });
         },
         {
             onMutate: (values) => {},
             onSuccess: (result, values) => {
-                toast.success(` موضوع دوره آموزشی با موفقیت بروزرسانی شد.`);
+                toast.success(`نظر شما با موفقیت ادیت شد.`);
                 if (values.callBack) {
                     values.callBack();
                 }
@@ -29,7 +29,7 @@ export const useEditTopic=()=> {
             onSettled: () => {
                 queryClient.invalidateQueries(key);
             },
-            onError: (error, values, rollback) => {
+            onError: (error, values) => {
                 console.error(error);
                 if (values.callBack) {
                     values.callBack();

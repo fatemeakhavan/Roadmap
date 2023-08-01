@@ -31,7 +31,7 @@ function App() {
                 <CacheProvider value={cacheRtl}>
                     <ThemeProvider theme={theme}>
                         <Routes><Route path="/login" element={<Login/>}/></Routes>
-                        <ProtectedRoute>
+                       <ProtectedRoute>
                              <Grid container>
                                 <Grid lg={2}>
                                    <Sidebar/>

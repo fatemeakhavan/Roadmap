@@ -69,11 +69,15 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
                             </CardContent>
                             <CardActions>
                                 <Link to={`/topics/topicsByCourseId/${course.id}`}>
-                                    <Button size="small" variant="outlined"
+                                    <Button size="small" variant="outlined" color="success"
                                             sx={{marginTop: "10px", marginBottom: "10px"}}>اطلاعات بیشتر</Button>
                                 </Link>
-                                <IconButton aria-label="edit" sx={{marginLeft:"140px"}}>
-                                    <BorderColorIcon style={{color:"#009688"}} onClick={() =>setEditCourse(course)} />
+                                <Link to={`/AdminTable/${course.id}`}>
+                                    <Button size="small" variant="outlined" color="success"
+                                            sx={{marginTop: "10px", marginBottom: "10px"}}>پنل ادمین</Button>
+                                </Link>
+                                <IconButton aria-label="edit">
+                                    <BorderColorIcon style={{color:"#009688",marginRight:"60px"}} onClick={() =>setEditCourse(course)} />
                                 </IconButton>
                                 <IconButton aria-label="delete course">
                                     <DeleteForeverIcon style={{color:"#CD1818"}} onClick={() => setDeleteCourse(course)}/>

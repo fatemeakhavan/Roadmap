@@ -1,0 +1,16 @@
+.node__parent {
+    width: 115px;
+    padding: 8px;
+    line-break: anywhere;
+    font-size: 11px;
+}
+
+.node__child {
+    width: 115px;
+    padding: 5px;
+    line-break: anywhere;
+    font-size: 10px;
+}
+.commentStyle:hover{
+    border:3px solid #9C27B0;
+}

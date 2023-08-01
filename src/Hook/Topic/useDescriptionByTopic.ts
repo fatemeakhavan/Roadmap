@@ -2,19 +2,18 @@ import { useQuery } from 'react-query';
 import { ERequest } from '../../Enum/App.enums';
 import { IRoadmapResult } from '../../Interface/RoadmapResult.interface';
 import RoadmapsQuery from '../../Helpers/RoadmapsQuery';
-import {ITopicGet} from '../../Interface/TopicGet.interface';
 
-export const useGetTopic=(courseId: any) => {
+export const useGetDescriptionByTopic=(topicId: number | null) => {
     return useQuery(
-        `topic`,
+        `descriptionByTopic`,
         async () => {
-            let topicResult: IRoadmapResult<ITopicGet[]>;
-            let topic: ITopicGet[] = [];
-            [topicResult] = await getTopic(courseId);
+            let topicResult: IRoadmapResult<string>;
+            let descriptionTopic: string = "";
+            [topicResult] = await getDescriptionByTopic(topicId);
             if (topicResult) {
-                topic = topicResult.result;
+                descriptionTopic = topicResult.result;
             }
-            return topic;
+            return descriptionTopic;
         },
         {
             retry: false,
@@ -23,11 +22,11 @@ export const useGetTopic=(courseId: any) => {
     );
 }
 
-const getTopic = (courseId: any): Promise<[IRoadmapResult<ITopicGet[]>]> => {
+const getDescriptionByTopic = (topicId: any): Promise<[IRoadmapResult<string>]> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const topicResult = await RoadmapsQuery< ITopicGet[]>({
-                url: `/api/topics/levelOneByCourse/${courseId}`,
+            const topicResult = await RoadmapsQuery<string>({
+                url: `/api/topics/descriptionByTopic/${topicId}`,
                 method: ERequest.GET,
 
             });
