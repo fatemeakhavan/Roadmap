@@ -8,8 +8,8 @@ import { ICourse } from '../../Interface/Course.interface';
 export const useEditCourse=()=> {
     const key = 'editCourse';
     return useMutation(
-        async (values: { description: string; name:string; newCourse: boolean; image_uri:string; courseId:number | undefined; callBack?: () => void }) => {
-            const { description,name,newCourse,image_uri,courseId } = values;
+        async (values: { description: string; name:string;  image_uri:string; courseId:number | undefined; callBack?: () => void }) => {
+            const { description,name,image_uri,courseId } = values;
             console.log(values)
             return await RoadmapsQuery<ICourse>({
                 url: `/api/courses/${courseId}`,
@@ -17,7 +17,7 @@ export const useEditCourse=()=> {
                    courseId:courseId,
                 },
                 method: ERequest.PATCH,
-                data: {description,name,newCourse,image_uri},
+                data: {description,name,image_uri},
             });
         },
         {

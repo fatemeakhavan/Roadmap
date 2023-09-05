@@ -11,10 +11,9 @@ export default function Header() {
         <Box sx={{ flexGrow: 1}}>
             <AppBar sx={{backgroundColor:"white",boxShadow:"0",borderBottom:"1px solid #CFD8DC",padding:"1.6px",width:"calc(100vw - 320px)"}} position="fixed">
                 <Toolbar>
-                    <Typography variant="h4" component="div"  sx={{ flexGrow: 1 ,color:"#000000"}}>
-                        Developer Roadmaps
+                    <Typography variant="h4" component="div"  sx={{ flexGrow: 1 ,color:"#000000",marginRight:"1200px",whiteSpace:"nowrap"}}>
+                   نقشه راه توسعه دهندگان
                     </Typography>
-                    <Button color="success" variant="contained">ورود/ثبت نام</Button>
                 </Toolbar>
             </AppBar>
         </Box>

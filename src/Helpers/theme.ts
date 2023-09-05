@@ -11,7 +11,7 @@ import{createTheme} from "@mui/material";
      palette:{
         mode:"light",
          primary:{
-            main:"#9C27B0",
+            main:"#00796b",
          },
          success:{
             main:"#009688"

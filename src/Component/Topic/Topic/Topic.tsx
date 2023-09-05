@@ -1,21 +1,34 @@
 import {useGetTopic} from "../../../Hook/Topic/usegetTopic";
 import {useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {DescriptionTopic} from "../DescriptionBYTopic/DescriptionTopic";
 import "../styles.css";
 import ReactFlow, {Position, useEdgesState, useNodesState,} from 'reactflow';
 import {ITopicGet} from "../../../Interface/TopicGet.interface";
 import {useGetDescriptionByTopic} from "../../../Hook/Topic/useDescriptionByTopic";
+import {useGetUser} from "../../../Hook/User/useGetUser";
+import Spinner from "../../../Spinner/Spinner";
+
 
 export const Topic = () => {
-
     const {courseId} = useParams();
-    const getTopicHook = useGetTopic(courseId);
     const [nodeId, setNodeId] = useState<number | null>(0);
-    const descriptionTopicHook = useGetDescriptionByTopic(nodeId);
+    const [userId, setUserId] = useState<number | null>(null);
+    const getTopicHook = useGetTopic(courseId,userId);
+    const descriptionTopicHook = useGetDescriptionByTopic(nodeId)
+    const listUsersHook=useGetUser();
+
 
     const [nodes, setNodes] = useNodesState([]);
     const [edges, setEdges] = useEdgesState([]);
+
+
+    useEffect(() => {
+        if (listUsersHook?.data?.length)
+            listUsersHook?.data?.forEach((user) => {
+                setUserId(user?.id)
+            })
+    }, [listUsersHook])
 
     let topics: ITopicGet[] = [];
     if (getTopicHook?.data) {
@@ -33,11 +46,11 @@ export const Topic = () => {
     }
 
     const checkIsLeft = (previous: any) => {
-        return previous?.length >= 3 && previous?.length < 6;
+        return previous?.length >= 2 && previous?.length < 6;
     }
 
     useEffect(() => {
-
+        console.log('triggered');
         const initialNodes: any[] = [];
         const initialEdges: any[] = [];
         const yValue = 60;
@@ -45,6 +58,7 @@ export const Topic = () => {
         let extraDistance = 0;
 
         topics?.map((levelOne, index) => {
+            // get()
             const node = {
                 id: `${levelOne.id.toString()}h`,
                 position: {x: 0, y: yValue},
@@ -61,7 +75,22 @@ export const Topic = () => {
                     const hasLeftChildren = checkIsLeft(levelOne?.children[iindex - 1]?.children) && !checkIsLeft(levelOne?.children[iindex - 2]?.children);
 
                     if ((levelOne as any)?.children[iindex - 1]?.children?.length >= 6)
-                        extraDistance += ((levelOne as any)?.children[iindex - 1]?.children?.length - 4) * 15;
+                        extraDistance += ((levelOne as any)?.children[iindex - 1]?.children?.length - 4) * 35;
+
+                    if (checkIsLeft(levelOne?.children[iindex - 1]?.children) && checkIsLeft(levelOne?.children[iindex - 2]?.children)) {
+                        extraDistance += levelOne?.children[iindex - 1]?.children?.length * 25
+                    }
+
+                    const stylesNode= (status : string, num:number)=>{
+                        const statusStyle = (styles.status as any)[status]
+                            if(num === 3){
+                                return {...styles.nodeChild, ...statusStyle}
+                            }
+
+                            return {...styles. nodeParent, ...statusStyle}
+                    }
+
+
 
                     if (levelTwo.children?.length > 0) {
                         if (levelTwo?.children?.length >= 6) {
@@ -71,7 +100,7 @@ export const Topic = () => {
                                 data: {label: levelTwo.name},
                                 type: "input",
                                 sourcePosition: Position.Right,
-                                style: styles.nodeParent
+                                style: stylesNode(levelTwo.status , 2)
                             }
                             const rightNode = {
                                 id: `${levelTwo.id.toString()}R`,
@@ -79,7 +108,7 @@ export const Topic = () => {
                                 data: {label: levelTwo.name},
                                 type: "input",
                                 sourcePosition: Position.Left,
-                                style: styles.nodeParent
+                                style: stylesNode(levelTwo.status , 2)
                             }
                             initialNodes.push(leftNode);
                             initialNodes.push(rightNode);
@@ -90,7 +119,7 @@ export const Topic = () => {
                                 data: {label: levelTwo.name},
                                 type: "input",
                                 sourcePosition: hasLeftChildren ? Position.Left : Position.Right,
-                                style: styles.nodeParent
+                                style:stylesNode(levelTwo.status , 2)
                             }
                             initialNodes.push(node)
                         }
@@ -102,7 +131,7 @@ export const Topic = () => {
                         data: {label: levelTwo.name},
                         type: 'output',
                         targetPosition: 'top',
-                        style: styles.nodeParent
+                        style: stylesNode(levelTwo.status , 2)
                     }
                     initialNodes.push(node)
 
@@ -113,7 +142,7 @@ export const Topic = () => {
                             data: {label: levelTwo.name},
                             type: "input",
                             sourcePosition: 'bottom',
-                            style: styles.nodeParent
+                            style:stylesNode(levelTwo.status , 2)
                         }
                         initialNodes.push(node2)
                     }
@@ -140,7 +169,6 @@ export const Topic = () => {
                         .map((levelThree, iiindex) => {
 
                             const xAxis = hasLeftChildren ? -200 : 200;
-                            const xAxisLevelFour = hasLeftChildren ? -350 :350;
 
                             if (levelTwo?.children?.length >= 6) {
                                 const children = [...levelTwo?.children];
@@ -154,7 +182,7 @@ export const Topic = () => {
                                         data: {label: item.name},
                                         type: "output",
                                         targetPosition: Position.Left,
-                                        style: styles.nodeChild
+                                        style: stylesNode(item.status , 3)
                                     }
                                     initialNodes.push(nodeChild)
                                     const edge = {
@@ -172,7 +200,7 @@ export const Topic = () => {
                                         data: {label: item.name},
                                         type: "output",
                                         targetPosition: Position.Right,
-                                        style: styles.nodeChild
+                                        style: stylesNode(item.status , 3)
                                     }
                                     initialNodes.push(nodeChild)
                                     const edge = {
@@ -190,7 +218,7 @@ export const Topic = () => {
                                     data: {label: levelThree.name},
                                     type: "output",
                                     targetPosition: hasLeftChildren ? Position.Right : Position.Left,
-                                    style: styles.nodeChild
+                                    style: stylesNode(levelThree.status , 3)
                                 }
                                 initialNodes.push(nodeChild)
                                 const edge = {
@@ -201,32 +229,6 @@ export const Topic = () => {
                                 }
                                 initialEdges.push(edge);
                             }
-
-
-                            levelThree.children
-                                .sort((a, b) => a.order - b.order)
-                                .map((levelFour,iiiindex)=>{
-                                    const nodeChild = {
-                                        id: `${levelFour.id.toString()}4`,
-                                        position: {x: xAxisLevelFour, y: yValueChild + extraDistance + 30 * iiiindex},
-                                        data: {label: levelFour.name},
-                                        type: "output",
-                                        targetPosition: hasLeftChildren ? Position.Right : Position.Left,
-                                        style: styles.nodeChild
-                                    }
-                                    initialNodes.push(nodeChild)
-                                    const edge = {
-                                        id: `e${levelThree.id}-${levelFour.id}`,
-                                        source: `${levelThree.id.toString()}o`,
-                                        target: `${levelFour.id.toString()}4`,
-                                        animated: true,
-                                    }
-                                    initialEdges.push(edge);
-
-                                })
-
-
-
 
                         })
                 })
@@ -243,24 +245,25 @@ export const Topic = () => {
                 topics.length > 0 ?
 
                     <div style={{height: '100vh', direction: "ltr"}}>
-                        <ReactFlow nodes={nodes} edges={edges} fitView zoomOnScroll={false} zoomOnPinch={false}
-                                   panOnDrag={false}
+                        <ReactFlow nodes={nodes} edges={edges} fitView zoomOnScroll={true} zoomOnPinch={false}
+                                   panOnDrag={true}
                                    onNodeClick={handleNodeClick}
                                    nodesConnectable={false}/>
 
                     </div>
 
                     : (
+                        <Spinner/>
 
-                        <div style={{textAlign: "center", marginTop: "300px", height: "100vh"}}>
-                            <img style={{width: "450px", borderRadius: "25px"}}
-                                 src={require("../../../Assets/images/error-404-not-found-1024x512.png")}/>
-                            <h2 style={{color: "#9C27B0"}}>موضوعی یافت نشد</h2>
-                        </div>
+                        // <div style={{textAlign: "center", marginTop: "300px", height: "100vh"}}>
+                        //     <img style={{width: "450px", borderRadius: "25px"}}
+                        //          src={require("../../../Assets/images/error-404-not-found-1024x512.png")}/>
+                        //     <h2 style={{color: "#9C27B0"}}>موضوعی یافت نشد</h2>
+                        // </div>
 
 
                     )}
-            {nodeId ? <DescriptionTopic topicId={nodeId} handleClose={handleClose}/> : null}
+            {nodeId ? <DescriptionTopic topicId={nodeId} handleClose={handleClose} refetchUserTopic={getTopicHook.refetch}/> : null}
 
         </>
 
@@ -272,18 +275,34 @@ export const Topic = () => {
 const styles = {
     nodeLevelOne:{
         background: 'transparent',
-        border: 'none'
-        , color: '#009688',
+        border: 'none',
+        color: '#009688',
         boxShadow: 'none'
     },
     nodeParent: {
-        width: 90,
+        width: "30",
         padding: 6,
         lineBreak: 'anywhere',
-        fontSize: 11,
+        fontSize: 10,
         borderRadius: 7,
         background: '#D4FCF0',
 
+    },
+    status: {
+        DONE: {
+            background: '#9e9e9e',
+            color: '#212121',
+            textDecoration: 'line-through',
+        },
+        IN_PROGRESS: {
+            background: "#e1bee7",
+            color: '#212121',
+        },
+        SKIP: {
+            background: "#006064",
+            color: "#9e9e9e",
+            textDecoration: 'line-through',
+        }
     },
     nodeChild: {
         display: '-webkit-box',
@@ -295,11 +314,9 @@ const styles = {
         width: 'fit-content',
         padding: 3,
         lineBreak: 'anywhere',
-        fontSize: 10,
+        fontSize:10,
         borderRadius: 7,
         background: '#A2E1DB',
-
-
 
     }
 }

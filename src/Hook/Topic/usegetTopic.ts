@@ -4,13 +4,13 @@ import { IRoadmapResult } from '../../Interface/RoadmapResult.interface';
 import RoadmapsQuery from '../../Helpers/RoadmapsQuery';
 import {ITopicGet} from '../../Interface/TopicGet.interface';
 
-export const useGetTopic=(courseId: any) => {
+export const useGetTopic=(courseId: any, userId:number | null) => {
     return useQuery(
         `topic`,
         async () => {
             let topicResult: IRoadmapResult<ITopicGet[]>;
             let topic: ITopicGet[] = [];
-            [topicResult] = await getTopic(courseId);
+            [topicResult] = await getTopic(courseId,userId);
             if (topicResult) {
                 topic = topicResult.result;
             }
@@ -19,16 +19,20 @@ export const useGetTopic=(courseId: any) => {
         {
             retry: false,
             onSuccess: () => {},
+            enabled: !!userId
         },
     );
 }
 
-const getTopic = (courseId: any): Promise<[IRoadmapResult<ITopicGet[]>]> => {
+const getTopic = (courseId: any,userId:number |null): Promise<[IRoadmapResult<ITopicGet[]>]> => {
     return new Promise(async (resolve, reject) => {
         try {
             const topicResult = await RoadmapsQuery< ITopicGet[]>({
                 url: `/api/topics/levelOneByCourse/${courseId}`,
                 method: ERequest.GET,
+                params:{
+                    userId,
+                }
 
             });
             resolve([ topicResult ]);

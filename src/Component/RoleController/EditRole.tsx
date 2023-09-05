@@ -56,15 +56,15 @@ export const EditRole = (props:IProps) => {
                 onClose={handleClose}
                 sx={{padding:"10px"}}
         >
-            <Box sx={{display:"flex", justifyContent:"center",padding:"40px 150px"}}>
+            <Box sx={{display:"flex", justifyContent:"center",padding:"20px 80px",textAlign:"center"}}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <h4 style={{color:"#009688"}}>ویرایش نقش </h4>
+                    <h4 style={{color:"#009688",textAlign:"center"}}>ویرایش نقش </h4>
                     <Controller
                         name="name"
                         control={control}
                         render={({ field}) =>   <TextField
-                            sx={{display:"block", marginBottom:"30px", marginTop:"50px"}}
+                            sx={{display:"block", marginBottom:"20px", marginTop:"30px"}}
                             id="outlined-basic"
                             variant="outlined"
                             multiline
@@ -78,7 +78,7 @@ export const EditRole = (props:IProps) => {
                         name="description"
                         control={control}
                         render={({ field }) =>      <TextField
-                            sx={{display:"block",marginBottom:"30px"}}
+                            sx={{display:"block",marginBottom:"20px"}}
                             id="outlined-basic"
                             variant="outlined"
                             multiline

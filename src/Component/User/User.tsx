@@ -1,18 +1,25 @@
 import {useGetUser} from "../../Hook/User/useGetUser";
 import {IUser} from "../../Interface/User.interface";
 import {IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import Paper from "@mui/material/Paper";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import {useAddRoleToUser} from "../../Hook/RoleController/useAddRoleToUser";
+import Spinner from "../../Spinner/Spinner";
+import UIContext from "../../Context/UIContext";
 
 
 
 export const User = () => {
+    const {changeTabIndex} = useContext(UIContext);
     const [searchName, setSearchName] = useState<string>("");
     const [activeList, setActiveList] = useState<number[]>([])
     const listUsersHook = useGetUser();
     const addRoleToUserHook = useAddRoleToUser();
+
+    useEffect(() => {
+        changeTabIndex(2);
+    }, [])
 
     let users: IUser[] = [];
     if (listUsersHook.data?.length) {
@@ -80,16 +87,9 @@ export const User = () => {
                             }} aria-label="simple table" className="container">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="left" sx={{
-                                            fontSize: "25px",
-                                            backgroundColor: "#009688"
-                                        }}>UserNamePod</TableCell>
-                                        <TableCell align="left"
-                                                   sx={{fontSize: "25px", backgroundColor: "#B2DFDB"}}>IdPod</TableCell>
-                                        <TableCell align="left" sx={{
-                                            fontSize: "25px",
-                                            backgroundColor: "#E1BEE7"
-                                        }}>Action</TableCell>
+                                        <TableCell align="left" sx={{fontSize: "25px", backgroundColor: "#009688"}}>نام کاربری پاد</TableCell>
+                                        <TableCell align="left" sx={{fontSize: "25px", backgroundColor: "#B2DFDB"}}>آیدی پاد</TableCell>
+                                        <TableCell align="left" sx={{fontSize: "25px", backgroundColor: "#E1BEE7"}}>عملیات</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -114,12 +114,13 @@ export const User = () => {
                     </>
 
                     : (
+                        <Spinner/>
 
-                        <div style={{textAlign: "center", marginTop: "300px", height: "100vh"}}>
-                            <img style={{width: "450px", borderRadius: "25px"}}
-                                 src={require("../../Assets/images/error-404-not-found-1024x512.png")}/>
-                            <h2 style={{color: "#9C27B0"}}>کاربر یافت نشد</h2>
-                        </div>
+                        // <div style={{textAlign: "center", marginTop: "300px", height: "100vh"}}>
+                        //     <img style={{width: "450px", borderRadius: "25px"}}
+                        //          src={require("../../Assets/images/error-404-not-found-1024x512.png")}/>
+                        //     <h2 style={{color: "#9C27B0"}}>کاربر یافت نشد</h2>
+                        // </div>
 
 
                     )}

@@ -23,7 +23,7 @@ export const RefreshToken = async () => {
             // delay for new refresh requests
             await AddDelayBeforRequest();
             return adminPanelAxiosInstance
-                .get('http://192.168.220.147:8080/api/pod/refreshToken', {headers: {"refreshToken": refreshToken}})
+                .get('http://localhost:8080/api/pod/refreshToken', {headers: {"refreshToken": refreshToken}})
                 .then(
                     (
                         result: IServerClasorResult<{

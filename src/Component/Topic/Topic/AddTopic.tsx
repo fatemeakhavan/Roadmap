@@ -18,8 +18,6 @@ export const AddTopic = (props:IProps) => {
     const schema=yup.object().shape({
         name:yup.string().required("نوشتن نام دوره آموزشی الزامی است"),
         description:yup.string().required("نوشتن توضیحات الزامی می باشد."),
-        group:yup.string().required("نوشتن گروه الزامی است"),
-        newTopic:yup.boolean().required("پر کردن این فیلد الزامی است"),
         level:yup.number().required("نوشتن سطح آن الزامی است"),
         order:yup.number().required("نوشتن آن الزامی است"),
         parent_id:yup.number().required("نوشتن آن الزامی میباشد")
@@ -38,8 +36,6 @@ export const AddTopic = (props:IProps) => {
         addTopicHook.mutate({
                 name: data.name,
                 description: data.description,
-                group:data.group,
-                newTopic:data.newTopic,
                 course_id:courseId!,
                 level:data.level,
                 order:data.order,
@@ -54,7 +50,7 @@ export const AddTopic = (props:IProps) => {
                 onClose={handleClose}
                 sx={{padding:"10px"}}
         >
-            <Box sx={{display:"flex", justifyContent:"center",padding:"40px 150px"}}>
+            <Box sx={{display:"flex", justifyContent:"center",padding:"20px 80px"}}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h4 style={{color:"#009688"}}>افزودن دوره آموزشی </h4>
@@ -63,10 +59,10 @@ export const AddTopic = (props:IProps) => {
                         name="name"
                         control={control}
                         render={({ field }) =>   <TextField
-                            sx={{display:"block", marginBottom:"30px", marginTop:"50px"}}
+                            sx={{display:"block", marginBottom:"20px", marginTop:"30px"}}
                             hiddenLabel
                             id="outlined-basic"
-                            label="name"
+                            label="نام"
                             variant="outlined"
                             multiline
                             {...field}
@@ -77,9 +73,9 @@ export const AddTopic = (props:IProps) => {
                         name="description"
                         control={control}
                         render={({ field }) =>      <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                            sx={{display:"block", marginBottom:"20px"}}
                             id="outlined-basic"
-                            label="description"
+                            label="توضیحات"
                             variant="outlined"
                             multiline
                             {...field}
@@ -87,38 +83,12 @@ export const AddTopic = (props:IProps) => {
                     />
                     {errors.description && (<p>{errors.description.message}</p>)}
                     <Controller
-                        name="newTopic"
-                        control={control}
-                        render={({ field }) => <TextField
-                            sx={{display:"block",marginBottom:"30px"}}
-                            id="outlined-basic"
-                            label="newTopic"
-                            variant="outlined"
-                            multiline
-                            {...field}
-                        />}
-                    />
-                    {errors.newTopic && (<p>{errors.newTopic.message}</p>)}
-                    <Controller
-                        name="group"
-                        control={control}
-                        render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"50px"}}
-                            id="outlined-basic"
-                            label="group"
-                            variant="outlined"
-                            multiline
-                            {...field}
-                        />}
-                    />
-                    {errors.group && (<p>{errors.group.message}</p>)}
-                    <Controller
                         name="level"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"50px"}}
+                            sx={{display:"block", marginBottom:"20px"}}
                             id="outlined-basic"
-                            label="level"
+                            label="سطح"
                             variant="outlined"
                             multiline
                             {...field}
@@ -129,9 +99,9 @@ export const AddTopic = (props:IProps) => {
                         name="order"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"50px"}}
+                            sx={{display:"block", marginBottom:"20px"}}
                             id="outlined-basic"
-                            label="order"
+                            label="شمارنده"
                             variant="outlined"
                             multiline
                             {...field}
@@ -142,9 +112,9 @@ export const AddTopic = (props:IProps) => {
                         name="parent_id"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                            sx={{display:"block", marginBottom:"20px"}}
                             id="outlined-basic"
-                            label="parent_id"
+                            label="آیدی والد"
                             variant="outlined"
                             multiline
                             {...field}

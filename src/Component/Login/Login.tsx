@@ -13,7 +13,7 @@ export const Login=()=>{
         try {
             setLoading(true);
             const response = await Fetch({
-                url: "http://192.168.220.147:8080/api/pod/login",
+                url: "http://localhost:8080/api/pod/login",
                 method: ERequest.GET,
 
             });
@@ -29,7 +29,7 @@ export const Login=()=>{
                 refresh_token: string;
                 expire_in:number;
             }>({
-                url: "http://192.168.220.147:8080/api/pod/getCode",
+                url: "http://localhost:8080/api/pod/getCode",
                 method: ERequest.GET,
                 params: {
                     code: code,
@@ -39,6 +39,8 @@ export const Login=()=>{
             localStorage.setItem('POD_APP:ACCESS_TOKEN', userInfo.data.access_Token);
             localStorage.setItem('POD_APP:REFRESH_TOKEN', userInfo.data.refresh_token);
             localStorage.setItem('POD_APP:EXPIRE_TIME', `${Date.now()}`);
+            localStorage.setItem('POD_APP:USER_ROLE',"ADMIN");
+            if(localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN"){}
 
         }catch {
             setError(true);

@@ -1,0 +1,8 @@
+.sidebar_hover:hover{
+    color:#009688;
+}
+
+.sidebar_hover.selected {
+    background-color: #dbf1e5;
+}
+

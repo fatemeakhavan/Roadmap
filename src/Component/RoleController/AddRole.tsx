@@ -39,7 +39,7 @@ export const AddRole = (props:IProps) => {
            onClose={handleClose}
            sx={{padding:"10px"}}
         >
-          <Box sx={{display:"flex", justifyContent:"center",padding:"40px 150px"}}>
+          <Box sx={{display:"flex", justifyContent:"center",padding:"20px 80px",textAlign:"center"}}>
 
               <form onSubmit={handleSubmit(onSubmit)}>
               <h4 style={{color:"#009688",textAlign:"center"}}>افزودن نقش </h4>
@@ -48,9 +48,9 @@ export const AddRole = (props:IProps) => {
                         name="name"
                         control={control}
                         render={({ field }) =>   <TextField
-                        sx={{display:"block", marginBottom:"30px", marginTop:"50px"}}
+                        sx={{display:"block", marginBottom:"20px", marginTop:"30px"}}
                         id="outlined-basic"
-                        label="name"
+                        label="نام"
                         variant="outlined"
                         multiline
                         {...field}
@@ -62,9 +62,9 @@ export const AddRole = (props:IProps) => {
                    name="description"
                    control={control}
                    render={({ field }) =>      <TextField
-                   sx={{display:"block", marginBottom:"30px"}}
+                   sx={{display:"block", marginBottom:"20px"}}
                    id="outlined-basic"
-                   label="description"
+                   label="توضیحات"
                    variant="outlined"
                     multiline
                    {...field}

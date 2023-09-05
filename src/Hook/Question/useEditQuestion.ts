@@ -8,7 +8,7 @@ import {IQuestion} from '../../Interface/Question.interface'
 export const useEditQuestion=()=> {
     const key = 'editQuestion';
     return useMutation(
-        async (values: {context: string; correctAnswer:string; id:number; callBack?: () => void }) => {
+        async (values: {context: string | undefined; correctAnswer:string | undefined; id:number; callBack?: () => void }) => {
 
             const {context,correctAnswer,id} = values;
             console.log(values)

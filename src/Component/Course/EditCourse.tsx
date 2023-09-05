@@ -4,7 +4,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useEditCourse} from '../../Hook/Course/useEditCourse';
 import {ICourse} from "../../Interface/Course.interface";
 import {Box, Button, Dialog,TextField} from "@mui/material";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 interface IProps{
     course1:ICourse;
@@ -20,7 +20,6 @@ export const EditCourse = (props:IProps) => {
     const schema=yup.object().shape({
         description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
         name:yup.string().required("نوشتن نام دوره آموزشی الزامی است"),
-        newCourse:yup.boolean().required("الطامی"),
         image_uri:yup.string().required("نوشتن آدرس تصویر الزامی است"),
         });
 
@@ -28,7 +27,6 @@ export const EditCourse = (props:IProps) => {
         description:course1.description,
         id:0,
         name:course1.name,
-        newCourse:course1.newCourse,
         image_uri:course1.image_uri,
     });
 
@@ -44,7 +42,6 @@ export const EditCourse = (props:IProps) => {
         }
         setValue("description", data?.description)
         setValue("name", data?.name)
-        setValue("newCourse",data?.newCourse)
         setValue("image_uri",data?. image_uri)
 
     }, [course])
@@ -57,7 +54,6 @@ export const EditCourse = (props:IProps) => {
                 courseId:course1.id,
                 description: data.description,
                 name: data.name,
-                newCourse:data.newCourse,
                 image_uri:data.image_uri,
                 callBack:handleClose
             });
@@ -67,15 +63,15 @@ export const EditCourse = (props:IProps) => {
                 onClose={handleClose}
                 sx={{padding:"10px"}}
         >
-            <Box sx={{display:"flex", justifyContent:"center",padding:"40px 150px"}}>
+            <Box sx={{display:"flex", justifyContent:"center",padding:"20px 80px"}}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-
+                    <h4 style={{color:"success"}}>ویرایش دوره آموزشی </h4>
                     <Controller
                         name="name"
                         control={control}
                         render={({ field}) =>   <TextField
-                            sx={{display:"block", marginBottom:"30px", marginTop:"80px"}}
+                            sx={{display:"block", marginBottom:"20px", marginTop:"40px"}}
                             id="outlined-basic"
                             variant="outlined"
                             multiline
@@ -89,7 +85,7 @@ export const EditCourse = (props:IProps) => {
                         name="description"
                         control={control}
                         render={({ field }) =>      <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                            sx={{display:"block", marginBottom:"20px"}}
                             id="outlined-basic"
                             variant="outlined"
                             multiline
@@ -98,26 +94,11 @@ export const EditCourse = (props:IProps) => {
                         />}
                     />
                     {errors.description&& (<p>{errors.description.message}</p>)}
-
-                    <Controller
-                        name="newCourse"
-                        control={control}
-                        render={({ field }) => <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
-                            id="outlined-basic"
-                            variant="outlined"
-                            multiline
-                            defaultValue={data?.newCourse}
-                            {...field}
-                        />}
-                    />
-                    {errors.newCourse && (<p>{errors.newCourse.message}</p>)}
-
                     <Controller
                         name="image_uri"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"30px"}}
+                            sx={{display:"block", marginBottom:"20px"}}
                             id="outlined-basic"
                             variant="outlined"
                             multiline

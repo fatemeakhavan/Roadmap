@@ -9,22 +9,18 @@ import {useGetComment} from "../../Hook/Comment/useGetComment";
 
 interface IProps {
     topicId: number;
+    refetch: any
 }
 
 export const AddComment = (props: IProps) => {
-    const {topicId} = props;
+    const {topicId, refetch} = props;
     const [userId, setUserId] = useState<number | null>(null);
 
-    const {control, handleSubmit, formState: {errors}} = useForm<IComment>({
+    const {control, handleSubmit, formState: {errors}, reset, watch} = useForm<IComment>({
         defaultValues: {},
     });
     const addCommentHook = useAddComment();
     const listUsersHook = useGetUser();
-    const listCommentHook=useGetComment(topicId);
-
-    const handleRefetch = () => {
-        listCommentHook.refetch();
-    }
 
     useEffect(() => {
         if (listUsersHook?.data?.length)
@@ -37,7 +33,11 @@ export const AddComment = (props: IProps) => {
         addCommentHook.mutate({
                 context: data?.context,
                 user_id: userId,
-                topic_id: topicId,
+                topic_id: parseInt(topicId as unknown as string),
+                 callBack:()=> {
+                     refetch()
+                     reset();
+                 }
 
             }
         );
@@ -48,6 +48,7 @@ export const AddComment = (props: IProps) => {
                 <Controller
                     name="context"
                     control={control}
+                    defaultValue={''}
                     render={({field}) =>
                         <TextField
                             id="outlined-basic"
@@ -57,7 +58,7 @@ export const AddComment = (props: IProps) => {
                             sx={{textAlign:"center"}}
                             InputProps={{
                                 endAdornment: (
-                                    <IconButton type="submit" onClick={handleRefetch} sx={{direction:"ltr"}}><SendIcon /></IconButton>
+                                    <IconButton type="submit" sx={{color:"#004d40",transform: 'scaleX(-1)'}} disabled={!watch("context")}><SendIcon /></IconButton>
                                 )
                             }}
                             {...field}

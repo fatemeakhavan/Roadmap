@@ -8,7 +8,7 @@ import { IUserTopic } from '../../Interface/UserTopix.interface';
 export const useAddUserTopic=()=> {
     const key = 'addUserTopic';
     return useMutation(
-        async (values: { topic_id: number |undefined; user_id: number; status: "DONE" | "IN_PROGRESS" | "SKIP" | "DEFAULT";}) => {
+        async (values: { topic_id: number |undefined; user_id: number | null; status: "DONE" | "IN_PROGRESS" | "SKIP" | "DEFAULT";}) => {
             const { topic_id, user_id ,status} = values;
             return await RoadmapsQuery<IUserTopic>({
                 url: `/api/userTopic`,

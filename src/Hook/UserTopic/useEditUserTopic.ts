@@ -8,14 +8,15 @@ import { IUserTopic } from '../../Interface/UserTopix.interface';
 export const useUpdateUserTopic=()=> {
     const key = 'updateUserTopic';
     return useMutation(
-        async (values: { user_id: number; topic_id:number | undefined; status:"DONE" | "IN_PROGRESS" | "SKIP" | "DEFAULT" ;callBack?: () => void }) => {
+        async (values: { user_id: number | null; topic_id:number | undefined; status:"DONE" | "IN_PROGRESS" | "SKIP" | "DEFAULT" ;callBack?: () => void }) => {
             const { user_id,topic_id,status } = values;
-            console.log(values)
+            console.log('user_id', user_id)
+            console.log('topic_id', topic_id)
             return await RoadmapsQuery<IUserTopic>({
                 url: `/api/userTopic`,
                 params:{
                     topicId:topic_id,
-                    userId:1,
+                    userId:user_id,
 
                 },
                 method: ERequest.PATCH,
@@ -35,7 +36,7 @@ export const useUpdateUserTopic=()=> {
             },
             onError: (error, values, rollback) => {
                 console.error(error);
-                //if (rollback) rollback();
+
             },
         },
     );}

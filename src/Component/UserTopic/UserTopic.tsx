@@ -12,12 +12,14 @@ import {useEffect} from "react";
 
 interface IProps{
    topicId : number;
+   userId: number | null;
+   refetch: any
 }
 
 export const UserTopic=(props:IProps)=> {
-    const{topicId}=props;
+    const{topicId ,userId, refetch}=props;
 
-    const getUserTopicHook= useUserGetTopic(topicId);
+    const getUserTopicHook= useUserGetTopic(topicId,userId);
     let userTopic: IUserTopic | undefined;
     if (getUserTopicHook.data) {
         userTopic= getUserTopicHook.data;
@@ -35,13 +37,11 @@ export const UserTopic=(props:IProps)=> {
 
 
     const handleChange = (event: { target: { value: React.SetStateAction<any>; }; }) => {
-        console.log(userTopic?.status)
-
         if(!userTopic?.status){
 
             addUserTopicHook.mutate({
                 topic_id:topicId,
-                user_id:1,
+                user_id:userId,
                 status:event.target.value,
             });
         }
@@ -49,8 +49,9 @@ export const UserTopic=(props:IProps)=> {
         else{
             patchUserTopicHook.mutate({
                 topic_id:topicId,
-                user_id:1,
+                user_id:userId,
                 status:event.target.value,
+                callBack:refetch
             });
         };
         setStatus(event.target.value);
@@ -59,8 +60,7 @@ export const UserTopic=(props:IProps)=> {
 
     return (
         <Box sx={{ maxWidth: 160 }}>
-
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{justifyContent:'flex-end',position:"relative",textAlign:"center"}}>
                 <InputLabel id="demo-simple-select-label">status</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -72,7 +72,6 @@ export const UserTopic=(props:IProps)=> {
                     <MenuItem value="DONE">DONE</MenuItem>
                     <MenuItem value="IN_PROGRESS">IN_PROGRESS</MenuItem>
                     <MenuItem value="SKIP">SKIP</MenuItem>
-                    <MenuItem value="DEFAULT">DEFAULT</MenuItem>
                 </Select>
             </FormControl>
         </Box>

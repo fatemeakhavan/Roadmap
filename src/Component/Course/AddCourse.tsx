@@ -19,7 +19,6 @@ export const AddCourse = (props:IProps) => {
     const schema=yup.object().shape({
         description:yup.string().required("نوشتن توضیحات دوره آموزشی الزامی است"),
         name:yup.string().required("نوشتن نام دوره آموزشی الزامی است"),
-        newCourse:yup.boolean().required("الزامی می باشد"),
         image_uri:yup.string().required("نوشتن آدرس تصویر الزامی است"),
     });
 
@@ -35,7 +34,6 @@ export const AddCourse = (props:IProps) => {
         addCourseHook.mutate({
                 description: data.description,
                 name: data.name,
-                newCourse:data.newCourse,
                 image_uri:data.image_uri,
                 callBack:handleClose
             }
@@ -45,9 +43,10 @@ export const AddCourse = (props:IProps) => {
     return (
         <Dialog open={true}
                 onClose={handleClose}
-                sx={{padding:"10px"}}
+                sx={{padding:"5px"}}
+
         >
-            <Box sx={{display:"flex", justifyContent:"center",padding:"40px 150px"}}>
+            <Box sx={{display:"flex", justifyContent:"center",padding:"20px 80px"}}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h4 style={{color:"success"}}>افزودن دوره آموزشی </h4>
@@ -56,10 +55,10 @@ export const AddCourse = (props:IProps) => {
                         name="name"
                         control={control}
                         render={({ field }) =>   <TextField
-                            sx={{display:"block", marginBottom:"30px", marginTop:"50px", width:"100%"}}
+                            sx={{display:"block", marginBottom:"20px", marginTop:"30px", width:"100%"}}
                             hiddenLabel
                             id="outlined-basic"
-                            label="name"
+                            label="نام"
                             variant="outlined"
                             multiline
 
@@ -71,9 +70,9 @@ export const AddCourse = (props:IProps) => {
                         name="description"
                         control={control}
                         render={({ field }) =>      <TextField
-                            sx={{display:"block", marginBottom:"30px",width:"100%"}}
+                            sx={{display:"block", marginBottom:"20px",width:"100%"}}
                             id="outlined-basic"
-                            label="description"
+                            label="توضیحات"
                             variant="outlined"
                             multiline
                             {...field}
@@ -81,26 +80,13 @@ export const AddCourse = (props:IProps) => {
                     />
                     {errors.description && (<p>{errors.description.message}</p>)}
                     <Controller
-                        name="newCourse"
-                        control={control}
-                        render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"30px",width:"100%"}}
-                            multiline
-                            id="outlined-basic"
-                            label="newCourse"
-                            variant="outlined"
-                            {...field}
-                        />}
-                    />
-                    {errors.newCourse && (<p>{errors.newCourse.message}</p>)}
-                    <Controller
                         name="image_uri"
                         control={control}
                         render={({ field }) =>  <TextField
-                            sx={{display:"block", marginBottom:"50px",width:"100%"}}
+                            sx={{display:"block", marginBottom:"20px",width:"100%"}}
                             multiline
                             id="outlined-basic"
-                            label="image_uri"
+                            label="آدرس تصویر"
                             variant="outlined"
                             {...field}
                         />}
