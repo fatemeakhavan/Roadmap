@@ -295,12 +295,12 @@ const styles = {
             textDecoration: 'line-through',
         },
         IN_PROGRESS: {
-            background: "#e1bee7",
+            background: "#f8bbd0",
             color: '#212121',
         },
         SKIP: {
             background: "#006064",
-            color: "#9e9e9e",
+            color: "#212121",
             textDecoration: 'line-through',
         }
     },

@@ -2,12 +2,15 @@ import {useEffect, useState} from "react";
 import {ERequest} from "../../Enum/App.enums"
 import Fetch from "../../Service/fetch"
 import {Box, Button, Typography} from "@mui/material";
+import {isAuth} from "../../Helpers/Auth";
+import {useNavigate} from "react-router-dom";
 
 
 
 export const Login=()=>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
 
     const handleRedirect = async () => {
         try {
@@ -49,6 +52,9 @@ export const Login=()=>{
     };
 
     useEffect(() => {
+        if (isAuth())
+            navigate('/');
+
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
         if (code) {
@@ -59,7 +65,7 @@ export const Login=()=>{
     }, []);
 
     return(
-           <Box  sx={{textAlign:"center", display:"flex", justifyContent:"center", backgroundColor:"#f9f9fd",marginTop:"280px"}}>
+           <Box  sx={{textAlign:"center", display:"flex", justifyContent:"center", backgroundColor:"#f9f9fd",marginTop:"10%"}}>
                <Box className="card">
                    <Box className="card-body" style={{padding:"60px 90px"}}>
                        {error ? (

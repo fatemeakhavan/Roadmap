@@ -66,7 +66,7 @@ export const User = () => {
 
     return (
         <>
-            <form style={{marginTop: "40px", marginRight: "50px"}}>
+            <form style={{marginTop: "2%", marginRight: "10%"}}>
                 <input
                     style={{border: "1px solid #009688", backgroundColor: "#f9f9fd", padding: "8px"}}
                     name="search"
@@ -79,9 +79,9 @@ export const User = () => {
                 users.length > 0 ?
                     <>
                         <TableContainer component={Paper}
-                                        sx={{marginTop: "45px", backgroundColor: "#f9f9fd", height: "100vh"}}>
+                                        sx={{marginTop: "3%", backgroundColor: "#f9f9fd", height: "100vh"}}>
                             <Table sx={{
-                                minWidth: "650",
+                                width: "90%",
                                 border: "1px solid #CFD8DC",
                                 boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)"
                             }} aria-label="simple table" className="container">

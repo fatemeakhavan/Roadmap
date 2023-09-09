@@ -30,7 +30,6 @@ const getUser = (): Promise<IRoadmapResult<IUserMe>> => {
             const usersMeResult = await RoadmapsQuery<IUserMe>({
                 url: `/api/users/me`,
                 method: ERequest.GET,
-
             });
             resolve(usersMeResult);
         } catch (error) {

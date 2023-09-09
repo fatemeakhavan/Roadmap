@@ -8,7 +8,6 @@ import {Grid} from '@mui/material';
 import Sidebar from "./Component/Main/Component/Sidebar";
 import Header from "./Component/Main/Component/Header";
 import {Index} from "./Router/index";
-import {QueryClient, QueryClientProvider} from "react-query";
 import React, {useEffect, useState} from "react";
 import {ProtectedRoute} from "./Router/ProtectedRoute";
 import {Route, Routes} from "react-router-dom";
@@ -16,6 +15,9 @@ import {Login} from "./Component/Login/Login";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import UIContext from "./Context/UIContext";
+import UserContext from "./Context/UserContext";
+import {useGetUserMe} from "./Hook/User/useGetUserMe";
+import {IUserMe} from "./Interface/UserMe.interface";
 
 
 const cacheRtl = createCache({
@@ -23,16 +25,22 @@ const cacheRtl = createCache({
     //@ts-ignore
     stylisPlugins: [prefixer, rtlPlugin]
 })
-export const queryClient = new QueryClient();
 
 function App() {
     const [tabIndex, setTabIndex] = useState(0);
+    const [userInfo, setUserInfo] = useState<IUserMe>()
+    const userInfoHook = useGetUserMe();
+
+    useEffect(() => {
+        setUserInfo(userInfoHook?.data)
+    }, [userInfoHook?.data])
 
     return (
         <>
-            <QueryClientProvider client={queryClient}>
+
                 <CacheProvider value={cacheRtl}>
                     <UIContext.Provider value={{tabIndex, changeTabIndex: setTabIndex}}>
+                        <UserContext.Provider value={{userInfo, userChange: setUserInfo}}>
                         <ThemeProvider theme={theme}>
                             <Routes><Route path="/login" element={<Login/>}/></Routes>
                             <ProtectedRoute>
@@ -42,16 +50,16 @@ function App() {
                                     </Grid>
                                     <Grid
                                         lg={10}
-                                        sx={{height: "100vh", backgroundColor: "#f9f9fd", marginTop: "50px"}}>
+                                        sx={{height: "100vh", backgroundColor: "#f9f9fd", marginTop: "50px", marginLeft: "320px", width: '100%'}}>
                                         <Header/> .
                                         <Index/>
                                     </Grid>
                                 </Grid>
                             </ProtectedRoute>
                         </ThemeProvider>
+                        </UserContext.Provider>
                     </UIContext.Provider>
                 </CacheProvider>
-            </QueryClientProvider>
             <ToastContainer position={"top-left"}/>
         </>
 

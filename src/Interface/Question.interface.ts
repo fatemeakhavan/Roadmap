@@ -4,6 +4,7 @@ export interface IQuestion{
     user_id: number;
     topic_id: number;
     id:number;
+
     answers?: {
         id:number;
         context:string;
@@ -11,5 +12,6 @@ export interface IQuestion{
         user_lastname:string;
         user_id: number;
         question_id:number;
+
     }[];
 }

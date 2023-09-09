@@ -10,11 +10,13 @@ export const useGetComment=(topicId: number , page: number, size: number) => {
         async () => {
             let commentResult: IRoadmapResult<IComment[]>;
             let commentTopic: IComment[] = [];
+            let count :number = 0;
             [commentResult] = await getCommentByTopic(topicId,page,size);
             if (commentResult) {
                 commentTopic = commentResult.result;
+                count = commentResult.total;
             }
-            return commentTopic;
+            return {commentTopic,count};
         },
         {
             retry: false,

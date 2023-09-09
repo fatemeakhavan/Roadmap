@@ -11,25 +11,25 @@ import "../styles.css";
 import {IconButton} from "@mui/material";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {IUserMe} from "../../Interface/UserMe.interface";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {DeleteCourse} from "./DeleteCourse";
 import {EditCourse} from "./EditCourse";
 import "./style.css";
+import UserContext from "../../Context/UserContext";
 
 
 interface IProps {
     filteredItems: ICourse[];
     refetch: any;
 
+
 }
 
 export const Course: React.FunctionComponent<IProps> = (props) => {
     const {filteredItems, refetch} = props;
+    const {userInfo} = useContext(UserContext);
     const [deleteCourse, setDeleteCourse] = useState<ICourse | null>(null);
     const [editCourse, setEditCourse] = useState<ICourse | null>(null);
-    const [role, setRole]=useState<number | null>(null);
-
 
 
     const handleDeleteClose = () => {
@@ -42,7 +42,7 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
         refetch();
     }
 
-
+    console.log('userInfo', userInfo);
 
 
     return (
@@ -50,7 +50,15 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
 
             {
                 filteredItems?.map((course) => (
-                    <Card sx={{maxWidth: 345, marginLeft: "20px", marginBottom: "15px", marginTop: "15px"}}
+                    <Card sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        maxWidth: "22%",
+                        minWidth: "300px",
+                        marginLeft: "1%",
+                        marginBottom: "5%"
+                    }}
                           className="style-card-hover">
                         <Link to={`/topics/topicsByCourseId/${course.id}`} className="link_style">
                             <CardMedia
@@ -69,31 +77,34 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
                                 </Typography>
                             </CardContent>
                         </Link>
-                        <CardActions>
-                            <Link to={`/topics/topicsByCourseId/${course.id}`}>
-                                <Button size="small" variant="outlined" color="success"
-                                        sx={{marginTop: "10px", marginBottom: "10px"}}>اطلاعات بیشتر</Button>
-                            </Link>
+                        <CardActions sx={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div>
+                                <Link to={`/topics/topicsByCourseId/${course.id}`}>
+                                    <Button size="small" variant="outlined" color="success"
+                                            sx={{marginTop: "10px", marginBottom: "10px", whiteSpace: 'nowrap', marginRight: "5px"}}>اطلاعات
+                                        بیشتر</Button>
+                                </Link>
+                                <Link to={`/AdminTable/${course.id}`}>
+                                    <Button size="small" variant="outlined" color="success"
+                                            sx={{marginTop: "10px", marginBottom: "10px"}}>پنل ادمین</Button>
+                                </Link>
+                            </div>
+
 
                             {
-                                localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN" ?
-                                <>
-                                    <Link to={`/AdminTable/${course.id}`}>
-                                        <Button size="small" variant="outlined" color="success"
-                                                sx={{marginTop: "10px", marginBottom: "10px", marginRight: "60px"}}>پنل
-                                            ادمین</Button>
-                                    </Link>
-                                    <IconButton aria-label="edit">
-                                        <BorderColorIcon style={{color: "#009688"}}
-                                                         onClick={() => setEditCourse(course)}/>
-                                    </IconButton>
-                                    <IconButton aria-label="delete course">
-                                        <DeleteForeverIcon style={{color: "#CD1818"}}
-                                                           onClick={() => setDeleteCourse(course)}/>
-                                    </IconButton>
+                                userInfo?.roles[0] === 2 ?
+                                    <div>
+                                        <IconButton aria-label="edit" sx={{marginRight: "5px"}}>
+                                            <BorderColorIcon style={{color: "#009688"}}
+                                                             onClick={() => setEditCourse(course)}/>
+                                        </IconButton>
+                                        <IconButton aria-label="delete course">
+                                            <DeleteForeverIcon style={{color: "#CD1818"}}
+                                                               onClick={() => setDeleteCourse(course)}/>
+                                        </IconButton>
 
 
-                                </> : null}
+                                    </div> : null}
                         </CardActions>
                     </Card>
                 ))

@@ -56,20 +56,20 @@ interface IProps {
 }
 
 const questionPageSize = 4;
-const commentPageSize = 6;
+const commentPageSize = 3;
 
 export const DescriptionTopic=(props:IProps)=> {
 
     const{topicId,handleClose, refetchUserTopic}=props;
-    const descriptionTopicHook =useGetDescriptionByTopic(topicId)
     const [value, setValue] = React.useState(0);
     const [questionId,setQuestionId]=React.useState<number>(0)
     const [questionPageNumber, setQuestionPageNumber] = useState(0);
     const [commentPageNumber, setCommentPageNumber] = useState(0);
-    const listQuestionHook=useGetQuestion(topicId, questionPageNumber, questionPageSize);
     const [userId, setUserId] = useState<number | null>(null);
-    const listCommentHook = useGetComment(topicId,commentPageNumber,commentPageSize);
 
+    const listCommentHook = useGetComment(topicId,commentPageNumber,commentPageSize);
+    const listQuestionHook=useGetQuestion(topicId, questionPageNumber, questionPageSize);
+    const descriptionTopicHook =useGetDescriptionByTopic(topicId)
     const listUsersHook = useGetUser();
 
     useEffect(() => {
@@ -100,8 +100,8 @@ export const DescriptionTopic=(props:IProps)=> {
         description = descriptionTopicHook.data;
     }
     useEffect(() => {
-        if (listQuestionHook?.data?.length)
-            listQuestionHook?.data?.forEach((question) => {
+        if (listQuestionHook?.data?.questionTopic?.length)
+            listQuestionHook?.data?.questionTopic?.forEach((question) => {
                 setQuestionId(question?.id)
             })
     }, [listQuestionHook])
@@ -135,7 +135,7 @@ export const DescriptionTopic=(props:IProps)=> {
                 </Box>
                 <CustomTabPanel value={value} index={0}>
                     <div style={{maxWidth:"500px"}}>
-                      <Answers topicId={topicId} page={questionPageNumber} onPageChange={handleChangeQuestionPage} pageSize={questionPageSize}/>
+                      <Answers topicId={topicId} page={questionPageNumber} onPageChange={handleChangeQuestionPage} pageSize={questionPageSize} count={listQuestionHook?.data?.count!}/>
                     </div>
                 </CustomTabPanel>
 
@@ -144,7 +144,7 @@ export const DescriptionTopic=(props:IProps)=> {
                         <AddComment topicId={topicId} refetch={listCommentHook.refetch}/>
                     </div>
                     <div style={{marginBottom:"50px",maxWidth:"500px"}}>
-                        <ShowComment topicId={topicId} page={commentPageNumber} onPageChange={handleChangeCommentPage} pageSize={commentPageNumber}/>
+                        <ShowComment topicId={topicId} page={commentPageNumber} onPageChange={handleChangeCommentPage} pageSize={commentPageSize}/>
                     </div>
                 </CustomTabPanel>
 
@@ -162,7 +162,7 @@ export const DescriptionTopic=(props:IProps)=> {
                                 <AddQuestion topicId={topicId} refetch={listQuestionHook.refetch}/>
                             </div>
                             <div style={{textAlign:"center",marginBottom:"50px",maxWidth:"500px"}}>
-                                <ShowQuestion topicId={topicId} page={questionPageNumber} onPageChange={handleChangeQuestionPage} pageSize={questionPageSize}/>
+                                <ShowQuestion topicId={topicId} page={questionPageNumber} onPageChange={handleChangeQuestionPage} pageSize={questionPageSize} count={listQuestionHook?.data?.count!}/>
                             </div>
                         </CustomTabPanel>
 

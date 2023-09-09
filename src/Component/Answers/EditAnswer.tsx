@@ -7,7 +7,7 @@ import {IAnswer} from "../../Interface/Answer.interface";
 import {useGetUser} from "../../Hook/User/useGetUser";
 
 interface IProps{
-    answerQuestion:IAnswer;
+    answerQuestion:IAnswer ;
     handleClose: () => void;
     questionId:number | null;
 }

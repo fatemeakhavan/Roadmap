@@ -34,6 +34,7 @@ export const AdminTable = () => {
     const [topics, setTopics] = useState<any>([]);
     const [page, setPage] = useState(1);
     const listUsersHook = useGetUser();
+    const pageSize = 9;
 
     const handleChangePage = (event: ChangeEvent<any>, newPage: number,) => setPage(newPage);
 
@@ -99,16 +100,23 @@ export const AdminTable = () => {
         return allTopics?.filter((nameTopic) => (nameTopic.name.toLowerCase().includes(searchName.toLowerCase())));
     }, [allTopics, searchName])
 
+    const paginatedItems = useMemo(() => {
+        if (!filteredItems) return;
+        const temp = [...filteredItems];
+
+        return temp.slice((page - 1) * pageSize, page * pageSize)
+    }, [filteredItems, page])
+
     const renderList = () => {
         switch (listTopicHook.status) {
             case "success":
                 return (
                     <>
                         <TableContainer component={Paper}
-                                        sx={{marginTop: "45px", backgroundColor: "#f9f9fd", height: "100vh"}}>
+                                        sx={{marginTop: "3%", backgroundColor: "#f9f9fd", height: "100vh"}}>
                             <Table sx={{
                                 marginBottom: "20px",
-                                minWidth: "650",
+                                width: "90%",
                                 border: "1px solid #CFD8DC",
                                 boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)"
                             }} aria-label="simple table" className="container">
@@ -135,7 +143,7 @@ export const AdminTable = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {filteredItems?.map((topic) => (
+                                    {paginatedItems?.map((topic) => (
                                         <>
                                             <TableRow className="style-table-hover">
                                                 <TableCell align="left">{topic?.name} </TableCell>
@@ -161,7 +169,7 @@ export const AdminTable = () => {
                                 </TableBody>
                             </Table>
                             <Pagination
-                                count={10}
+                                count={Math.ceil(filteredItems?.length! / pageSize)}
                                 page={page}
                                 onChange={handleChangePage}
                                 style={{display: 'flex', justifyContent: 'center', marginBottom: 20}}
@@ -183,7 +191,13 @@ export const AdminTable = () => {
 
     return (
         <>
-            <form style={{marginTop: "40px", marginRight: "50px"}}>
+            <form style={{
+                marginTop: "2%",
+                marginRight: "7%",
+                marginLeft: "5%",
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}>
                 <input
                     style={{border: "1px solid #009688", backgroundColor: "#f9f9fd", padding: "8px"}}
                     name="search"
@@ -191,7 +205,7 @@ export const AdminTable = () => {
                     placeholder="جستجو کنید"
                     onChange={handleInputChange}
                 />
-                <Fab size="medium" color="success" sx={{marginLeft: "1240px"}}>
+                <Fab size="medium" color="success">
                     <AddIcon onClick={() => setAddTopic(topics)}/>
                 </Fab>
             </form>

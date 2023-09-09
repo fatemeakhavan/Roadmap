@@ -5,6 +5,4 @@ export interface IComment{
     topic_id: number;
     user_firstname:string;
     user_lastname:string;
-
-
 }

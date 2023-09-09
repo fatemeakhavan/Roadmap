@@ -9,20 +9,19 @@ import Spinner from "../../Spinner/Spinner";
 import UIContext from "../../Context/UIContext";
 
 
-
 export const Courses = () => {
     const {changeTabIndex} = useContext(UIContext);
     const [searchName, setSearchName] = useState<string>("");
     const [page, setPage] = useState<number>(0);
     const [addCourse, setAddCourse] = useState<ICourse[] | null>(null);
-    const size: number = 10;
+    const size: number = 9;
     const listCourseHook = useGetCourse(page, size);
     const handlePageChange = (event: ChangeEvent<any>, newPage: number,) => setPage(newPage - 1);
 
 
     let courses: ICourse[] = [];
-    if (listCourseHook.data?.length) {
-        courses = listCourseHook.data;
+    if (listCourseHook.data?.courses?.length) {
+        courses = listCourseHook.data?.courses;
     }
 
     useEffect(() => {
@@ -55,7 +54,7 @@ export const Courses = () => {
 
             {listCourseHook.isLoading ? <Spinner/> : (
                 <Box>
-                    <form style={{marginTop: "40px", marginRight: "50px"}}>
+                    <form style={{marginTop: "2%", marginRight: "7%", marginLeft: "5%", display: 'flex', justifyContent: 'space-between'}}>
                         <input
                             style={{border: "1px solid #009688", backgroundColor: "#f9f9fd", padding: "8px"}}
                             name="search"
@@ -64,7 +63,7 @@ export const Courses = () => {
                             onChange={handleInputChange}
                         />
                         {localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN" ?
-                            <Fab size="medium" color="success" sx={{marginLeft: "1240px"}}>
+                            <Fab size="medium" color="success">
                                 <AddIcon onClick={() => setAddCourse(courses)}/>
                             </Fab>
                             : null}
@@ -74,15 +73,16 @@ export const Courses = () => {
                     {
                         courses.length > 0 ?
                             <>
-                                <Box sx={{display: "flex", flexWrap: "wrap", marginTop: "20px"}}>
+                                <Box sx={{display: "flex", flexWrap: "wrap", marginTop: "3%",marginLeft:"5%"}}>
                                     <Course filteredItems={filteredItems} refetch={listCourseHook.refetch}/>
                                 </Box>
+                                {listCourseHook.data?.count! / size > 1 &&
                                 <Pagination
-                                    count={size}
+                                    count={Math.ceil(listCourseHook.data?.count! / size)}
                                     page={page + 1}
                                     onChange={handlePageChange}
                                     style={{display: 'flex', justifyContent: 'center', marginBottom: 20}}
-                                />
+                                />}
                             </>
                             : (
                                 <Spinner/>

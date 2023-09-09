@@ -26,7 +26,6 @@ const Sidebar=()=>{
                     </ListItemIcon>
                     <ListItemText primary="فهرست دوره ها" />
                 </ListItem>
-                {localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN" ?
                     <>
                         <ListItem button component={Link} to="/roles"className={`sidebar_hover ${tabIndex === 1 && 'selected'}`}>
                             <ListItemIcon>
@@ -40,7 +39,7 @@ const Sidebar=()=>{
                             </ListItemIcon>
                             <ListItemText primary="فهرست کاربران" />
                         </ListItem>
-                    </> : null }
+                    </>
 
             </Drawer>
         </Grid>

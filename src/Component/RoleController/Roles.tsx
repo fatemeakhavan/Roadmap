@@ -53,7 +53,7 @@ export const Roles=()=>{
 
     return(
         <>
-            <form style={{marginTop: "40px", marginRight: "50px"}}>
+            <form style={{marginTop: "2%", marginRight: "7%", marginLeft: "5%", display: 'flex', justifyContent: 'space-between'}}>
                 <input
                     style={{border: "1px solid #009688", backgroundColor: "#f9f9fd", padding: "8px"}}
                     name="search"
@@ -61,7 +61,7 @@ export const Roles=()=>{
                     placeholder="جستجو کنید"
                     onChange={handleInputChange}
                 />
-                <Fab size="medium" color="success" sx={{marginLeft:"1240px"}}>
+                <Fab size="medium" color="success">
                     <AddIcon onClick={() => setAddRole(roles)}/>
                 </Fab>
             </form>
@@ -69,8 +69,8 @@ export const Roles=()=>{
             {
                 roles.length>0 ?
                     <>
-                        <TableContainer component={Paper} sx={{marginTop:"45px",backgroundColor:"#f9f9fd",height:"100vh"}}>
-                            <Table sx={{minWidth: "650", border:"1px solid #CFD8DC",boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)" }} aria-label="simple table" className="container" >
+                        <TableContainer component={Paper} sx={{marginTop:"5%",backgroundColor:"#f9f9fd",height:"100vh"}}>
+                            <Table sx={{width: "90%", border:"1px solid #CFD8DC",boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)" }} aria-label="simple table" className="container" >
                                 <TableHead>
                                     <TableRow >
                                         <TableCell align="left" sx={{fontSize:"25px",backgroundColor:"#009688"}}>نام</TableCell>

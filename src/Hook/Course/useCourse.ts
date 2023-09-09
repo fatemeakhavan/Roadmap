@@ -10,11 +10,13 @@ export const useGetCourse=(page:number,size:number) => {
         async () => {
             let coursesResult: IRoadmapResult<ICourse[]>;
             let courses: ICourse[] = [];
+            let count = 0;
             [coursesResult] = await getCourse(page,size);
             if (coursesResult) {
                 courses = coursesResult.result;
+                count = coursesResult.total;
             }
-            return courses;
+            return {courses, count};
         },
         {
             retry: false,

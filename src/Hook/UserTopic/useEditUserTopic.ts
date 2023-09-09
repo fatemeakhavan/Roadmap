@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 import { ERequest } from '../../Enum/App.enums';
-import { queryClient } from '../../App';
+import { queryClient } from '../../index';
 import { toast } from 'react-toastify';
 import RoadmapsQuery from '../../Helpers/RoadmapsQuery';
 import { IUserTopic } from '../../Interface/UserTopix.interface';

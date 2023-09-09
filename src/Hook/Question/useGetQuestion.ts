@@ -12,11 +12,13 @@ export const useGetQuestion=(topicId: number | null, page: number, size: number)
             console.log('topicid', topicId);
             let questionResult: IRoadmapResult< IQuestion[]>;
             let questionTopic:  IQuestion[] = [];
+            let count = 0;
             [questionResult] = await getQuestionByTopic(topicId, page, size);
             if (questionResult) {
                 questionTopic = questionResult.result;
+                count = questionResult.total;
             }
-            return questionTopic;
+            return {questionTopic, count};
         },
         {
             retry: false,

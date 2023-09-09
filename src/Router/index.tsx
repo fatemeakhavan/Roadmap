@@ -47,6 +47,11 @@ export const Index: React.FunctionComponent<{}> = () => {
                     <AdminTable/>
                 </ProtectedRoute>
             }/>
+            <Route path="/*" element={
+                <ProtectedRoute>
+                    <Courses/>
+                </ProtectedRoute>
+            }/>
 
         </Routes>
 

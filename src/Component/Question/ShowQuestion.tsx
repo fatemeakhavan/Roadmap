@@ -17,10 +17,11 @@ interface IProps {
     page: number,
     onPageChange:any,
     pageSize: number;
+    count: number;
 }
 
 export const ShowQuestion = (props: IProps) => {
-    const {topicId, page,onPageChange, pageSize} = props;
+    const {topicId, page,onPageChange, pageSize, count} = props;
     const listQuestionHook = useGetQuestion(topicId, page, 4);
     const [deleteQuestion, setDeleteQuestion] = useState<number | null>(null);
     const [editQuestion,setEditQuestion]= useState<IQuestion| null>(null);
@@ -28,8 +29,8 @@ export const ShowQuestion = (props: IProps) => {
 
 
     let questions: IQuestion[] = [];
-    if (listQuestionHook.data?.length) {
-        questions = listQuestionHook?.data;
+    if (listQuestionHook.data?.questionTopic?.length) {
+        questions = listQuestionHook?.data?.questionTopic;
     }
     console.log('questions', questions);
     const handleDeleteClose = () => {
@@ -96,12 +97,14 @@ export const ShowQuestion = (props: IProps) => {
 
                 )
             )}
+            {count/pageSize > 1 &&
             <Pagination
-                count={10}
+                sx={{marginTop:"30px"}}
+                count={Math.ceil(count / pageSize)}
                 page={page + 1}
                 onChange={onPageChange}
                 style={{display: 'flex', justifyContent: 'center', marginBottom: 20}}
-            />
+            />}
             {deleteQuestion ? <DeleteQuestion id={deleteQuestion} handleClose={handleDeleteClose}/> : null}
             {editQuestion ? <EditQuestion question={editQuestion} handleClose={handleEditClose }/> : null }
             {addCorrectAnswer ? <CorrectAnswer question={addCorrectAnswer} handleClose={handleClose } />: null}

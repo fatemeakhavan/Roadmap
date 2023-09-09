@@ -5,7 +5,6 @@ import {useAddComment} from "../../Hook/Comment/useAddComment";
 import {useGetUser} from "../../Hook/User/useGetUser";
 import React, {useEffect, useState} from "react";
 import SendIcon from '@mui/icons-material/Send';
-import {useGetComment} from "../../Hook/Comment/useGetComment";
 
 interface IProps {
     topicId: number;
