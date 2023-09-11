@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {AddCourse} from "./AddCourse";
 import Spinner from "../../Spinner/Spinner";
 import UIContext from "../../Context/UIContext";
+import UserContext from "../../Context/UserContext";
 
 
 export const Courses = () => {
@@ -17,6 +18,7 @@ export const Courses = () => {
     const size: number = 9;
     const listCourseHook = useGetCourse(page, size);
     const handlePageChange = (event: ChangeEvent<any>, newPage: number,) => setPage(newPage - 1);
+    const {userInfo} = useContext(UserContext);
 
 
     let courses: ICourse[] = [];
@@ -54,7 +56,7 @@ export const Courses = () => {
 
             {listCourseHook.isLoading ? <Spinner/> : (
                 <Box>
-                    <form style={{marginTop: "2%", marginRight: "7%", marginLeft: "5%", display: 'flex', justifyContent: 'space-between'}}>
+                    <form style={{marginTop: "1%", marginRight: "7%", marginLeft: "5%", display: 'flex', justifyContent: 'space-between'}}>
                         <input
                             style={{border: "1px solid #009688", backgroundColor: "#f9f9fd", padding: "8px"}}
                             name="search"
@@ -62,18 +64,17 @@ export const Courses = () => {
                             placeholder="جستجو کنید"
                             onChange={handleInputChange}
                         />
-                        {localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN" ?
+                        {userInfo?.roles?.length! > 1?
                             <Fab size="medium" color="success">
                                 <AddIcon onClick={() => setAddCourse(courses)}/>
-                            </Fab>
-                            : null}
+                            </Fab> : null }
 
                     </form>
 
                     {
                         courses.length > 0 ?
                             <>
-                                <Box sx={{display: "flex", flexWrap: "wrap", marginTop: "3%",marginLeft:"5%"}}>
+                                <Box sx={{display: "flex", flexWrap: "wrap", marginTop: "1%",marginLeft:"5%"}}>
                                     <Course filteredItems={filteredItems} refetch={listCourseHook.refetch}/>
                                 </Box>
                                 {listCourseHook.data?.count! / size > 1 &&

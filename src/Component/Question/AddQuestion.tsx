@@ -2,10 +2,10 @@ import {useAddQuestion} from "../../Hook/Question/useAddQuestion";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {IconButton, TextField} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import React, {useEffect, useState} from "react";
+import React, {useContext} from "react";
 import {IQuestion} from "../../Interface/Question.interface";
-import {useGetUser} from "../../Hook/User/useGetUser";
-import {useGetQuestion} from "../../Hook/Question/useGetQuestion";
+import UserContext from "../../Context/UserContext";
+
 
 interface IProps {
     topicId: number;
@@ -15,26 +15,21 @@ interface IProps {
 export const AddQuestion=(props:IProps)=>{
 
     const{topicId, refetch}=props;
-    const [userId, setUserId] = useState<number | null>(null);
+
     const addQuestionHook=useAddQuestion();
-    const listUsersHook=useGetUser();
+    const {userInfo} = useContext(UserContext);
 
     const {control, handleSubmit, formState: {errors}, reset , watch} = useForm<IQuestion>({
         defaultValues: {},
     });
 
-    useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
+
 
     const onSubmit: SubmitHandler<IQuestion> = data => {
         addQuestionHook.mutate({
                 context: data?.context,
                 correctAnswer:data?.correctAnswer,
-                user_id: userId,
+                user_id: userInfo?.id!,
                 topic_id: parseInt(topicId as unknown as string),
                 callBack:()=> {
                     reset();

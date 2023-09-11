@@ -4,7 +4,7 @@ import { IRoadmapResult } from "../../Interface/RoadmapResult.interface";
 import RoadmapsQuery from '../../Helpers/RoadmapsQuery'
 import { IUserTopic} from '../../Interface/UserTopix.interface';
 
-export const useUserGetTopic=(topic_id: number | undefined , userId: number | null) => {
+export const useUserGetTopic=(topic_id: number | undefined , userId: number | null ) => {
     return useQuery(
         `userTopic`,
         async () => {

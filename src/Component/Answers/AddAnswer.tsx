@@ -1,9 +1,9 @@
 import {Box, Button, Dialog, TextField, Typography} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {IAnswer} from "../../Interface/Answer.interface";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useAddAnswer} from "../../Hook/Answers/useAddAnswer";
-import {useGetUser} from "../../Hook/User/useGetUser";
+import UserContext from "../../Context/UserContext";
 
 interface IProps{
     questionId:number;
@@ -12,16 +12,11 @@ interface IProps{
 
 export const AddAnswer=(props:IProps)=>{
     const{handleClose,questionId}=props;
-    const [userId, setUserId] = useState<number | null>(null);
     const addAnswerHook=useAddAnswer();
-    const listUsersHook=useGetUser();
+    const {userInfo} = useContext(UserContext);
 
-    useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
+
+
 
     const {control, handleSubmit,formState:{errors} } = useForm<IAnswer>({
         defaultValues:{}
@@ -33,7 +28,7 @@ export const AddAnswer=(props:IProps)=>{
             context: data.context,
             question_id:questionId,
             callBack:handleClose,
-            user_id:userId
+            user_id:userInfo?.id!
         });
     };
     return(

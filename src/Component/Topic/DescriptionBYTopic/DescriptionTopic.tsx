@@ -12,9 +12,9 @@ import {ShowQuestion} from "../../Question/ShowQuestion";
 import CloseIcon from '@mui/icons-material/Close';
 import {useGetQuestion} from "../../../Hook/Question/useGetQuestion";
 import {Answers} from "../../Answers/Answers";
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, useContext, useEffect, useState} from "react";
 import {useGetComment} from "../../../Hook/Comment/useGetComment";
-import {useGetUser} from "../../../Hook/User/useGetUser";
+import UserContext from "../../../Context/UserContext";
 
 
 interface TabPanelProps {
@@ -52,32 +52,26 @@ function a11yProps(index: number) {
 interface IProps {
     topicId: number;
     handleClose: () => void;
-    refetchUserTopic: any
+    onStatusChange:any;
+    status:any;
 }
 
 const questionPageSize = 4;
-const commentPageSize = 3;
+const commentPageSize = 6;
 
 export const DescriptionTopic=(props:IProps)=> {
 
-    const{topicId,handleClose, refetchUserTopic}=props;
+    const{topicId,handleClose,onStatusChange,status}=props;
     const [value, setValue] = React.useState(0);
     const [questionId,setQuestionId]=React.useState<number>(0)
     const [questionPageNumber, setQuestionPageNumber] = useState(0);
     const [commentPageNumber, setCommentPageNumber] = useState(0);
-    const [userId, setUserId] = useState<number | null>(null);
-
     const listCommentHook = useGetComment(topicId,commentPageNumber,commentPageSize);
     const listQuestionHook=useGetQuestion(topicId, questionPageNumber, questionPageSize);
-    const descriptionTopicHook =useGetDescriptionByTopic(topicId)
-    const listUsersHook = useGetUser();
+    const descriptionTopicHook =useGetDescriptionByTopic(topicId);
+    const {userInfo} = useContext(UserContext);
 
-    useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
+
 
     useEffect(() => {
         listQuestionHook.refetch();
@@ -126,7 +120,7 @@ export const DescriptionTopic=(props:IProps)=> {
                         <Tab label="پاسخ" {...a11yProps(0)} sx={{marginLeft:"35px"}}/>
                         <Tab label="نظرات" {...a11yProps(1)} sx={{marginLeft:"35px"}}/>
                         <Tab label="توضیحات" {...a11yProps(2)} sx={{marginLeft:"35px"}}/>
-                        {localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN" ?  <Tab label="سوالات" {...a11yProps(3)} sx={{marginLeft:"35px"}}/> : null}
+                        {userInfo?.roles?.length! > 1 ? <Tab label="سوالات" {...a11yProps(3)} sx={{marginLeft:"35px"}}/> : null }
 
                         <Box sx={{textAlign:"center"}}>
                             <IconButton onClick={handleClose}> <CloseIcon />  </IconButton>
@@ -150,24 +144,26 @@ export const DescriptionTopic=(props:IProps)=> {
 
                 <CustomTabPanel value={value} index={2}>
                     <div style={{textAlign:"center",marginBottom:"50px",marginRight:"65px",maxWidth:"500px"}}>
-                        <UserTopic topicId={topicId} userId={userId} refetch={refetchUserTopic}/>
+                        <UserTopic  onStatusChange={onStatusChange} status={status}/>
                     </div>
-                    <Typography sx={{color:"grey",textAlign:"center",marginBottom:"50px",marginTop:"50px",maxWidth:"500px"}}>{description}</Typography>
+                    <Typography sx={{color:"grey",marginBottom:"50px",marginTop:"50px",maxWidth:"500px"}}>{description}</Typography>
                 </CustomTabPanel>
 
-                {localStorage.getItem('POD_APP:USER_ROLE') === "ADMIN" ?
-                    <>
-                        <CustomTabPanel value={value} index={3}>
-                            <div style={{textAlign:"center",marginBottom:"50px",maxWidth:"500px"}}>
-                                <AddQuestion topicId={topicId} refetch={listQuestionHook.refetch}/>
-                            </div>
-                            <div style={{textAlign:"center",marginBottom:"50px",maxWidth:"500px"}}>
-                                <ShowQuestion topicId={topicId} page={questionPageNumber} onPageChange={handleChangeQuestionPage} pageSize={questionPageSize} count={listQuestionHook?.data?.count!}/>
-                            </div>
-                        </CustomTabPanel>
+                {userInfo?.roles?.length! > 1 ?
 
-                    </> : null
+                    <CustomTabPanel value={value} index={3}>
+                        <div style={{textAlign: "center", maxWidth: "500px"}}>
+                            <AddQuestion topicId={topicId} refetch={listQuestionHook.refetch}/>
+                        </div>
+                        <div style={{maxWidth: "500px"}}>
+                            <ShowQuestion topicId={topicId} page={questionPageNumber}
+                                          onPageChange={handleChangeQuestionPage} pageSize={questionPageSize}
+                                          count={listQuestionHook?.data?.count!}/>
+                        </div>
+                    </CustomTabPanel> : null
                 }
+
+
             </Box>
 
 

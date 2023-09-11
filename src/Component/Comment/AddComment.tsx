@@ -2,9 +2,9 @@ import {Button, IconButton, TextField} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {IComment} from "../../Interface/Comment.interface";
 import {useAddComment} from "../../Hook/Comment/useAddComment";
-import {useGetUser} from "../../Hook/User/useGetUser";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import SendIcon from '@mui/icons-material/Send';
+import UserContext from "../../Context/UserContext";
 
 interface IProps {
     topicId: number;
@@ -13,25 +13,21 @@ interface IProps {
 
 export const AddComment = (props: IProps) => {
     const {topicId, refetch} = props;
-    const [userId, setUserId] = useState<number | null>(null);
+    const {userInfo} = useContext(UserContext);
+    const addCommentHook = useAddComment();
 
     const {control, handleSubmit, formState: {errors}, reset, watch} = useForm<IComment>({
         defaultValues: {},
     });
-    const addCommentHook = useAddComment();
-    const listUsersHook = useGetUser();
 
-    useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
+
+
+
 
     const onSubmit: SubmitHandler<IComment> = data => {
         addCommentHook.mutate({
                 context: data?.context,
-                user_id: userId,
+                user_id: userInfo?.id!,
                 topic_id: parseInt(topicId as unknown as string),
                  callBack:()=> {
                      refetch()

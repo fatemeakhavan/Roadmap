@@ -3,9 +3,10 @@ import {IComment} from "../../Interface/Comment.interface";
 import {Avatar, Box, Divider, IconButton, Pagination, Stack, Typography} from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {DeleteComment} from "./DeleteComment";
 import {EditComment} from "./EditComment";
+import UserContext from "../../Context/UserContext";
 
 
 interface IProps {
@@ -20,6 +21,7 @@ export const ShowComment = (props: IProps) => {
         const [deleteComment, setDeleteComment] = useState<number | null>(null);
         const [editComment, setEditComment] = useState<IComment | null>(null);
         const listCommentHook = useGetComment(topicId,page,pageSize);
+        const {userInfo} = useContext(UserContext);
 
         let comments: IComment[] = [];
         if (listCommentHook.data?.commentTopic?.length)
@@ -52,10 +54,12 @@ export const ShowComment = (props: IProps) => {
                                                 <Avatar src="/broken-image.jpg" sx={{width: 25, height: 25}}/>
                                                 <Typography sx={{fontSize:"13px", fontWeight: 'bold', textAlign: 'start'}}>{comment.user_firstname}</Typography>
                                             </Stack>
-                                            <div>
-                                            <IconButton><DeleteForeverIcon sx={{fontSize: "18px", color: "red"}} onClick={() => setDeleteComment(comment.id)}/></IconButton>
-                                            <IconButton><EditIcon sx={{fontSize: "18px"}} onClick={() => setEditComment(comment)}/></IconButton>
-                                            </div>
+                                            {userInfo?.id === comment.user_id  ?
+                                              <div>
+                                                <IconButton><DeleteForeverIcon sx={{fontSize: "18px", color: "red"}} onClick={() => setDeleteComment(comment.id)}/></IconButton>
+                                                 <IconButton><EditIcon sx={{fontSize: "18px"}} onClick={() => setEditComment(comment)}/></IconButton>
+                                              </div> : null
+                                            }
 
                                         </div>
                                         <Typography>{comment.context}</Typography>

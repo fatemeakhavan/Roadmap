@@ -5,10 +5,11 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import {IAnswer} from "../../Interface/Answer.interface";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {AddAnswer} from "./AddAnswer";
 import {DeleteAnswer} from "./DeleteAnswer";
 import {EditAnswer} from "./EditAnswer";
+import UserContext from "../../Context/UserContext";
 
 
 interface IProps{
@@ -26,6 +27,7 @@ export const Answers =(props:IProps)=>{
     const[editAnswer,setEditAnswer]=useState<IAnswer | null>(null);
     const[deleteAnswer,setDeleteAnswer]=useState<number | null >(null)
     const listQuestionHook=useGetQuestion(topicId, page, pageSize);
+    const {userInfo} = useContext(UserContext);
 
     let questions: IQuestion[] = [];
     if (listQuestionHook.data?.questionTopic?.length) {
@@ -55,7 +57,6 @@ export const Answers =(props:IProps)=>{
                   <Box display={'flex'} sx={{justifyContent: 'space-between', border: '1px solid #e0e0e0',padding:"5px 15px", marginTop:"40px",backgroundColor:"#e0e0e0"}}>
                       <Typography variant="h6" sx={{color:"#9e9e9e"}}>
                           {question?.context}
-
                       </Typography>
 
                       {
@@ -90,20 +91,23 @@ export const Answers =(props:IProps)=>{
                                   <Avatar src="/broken-image.jpg" sx={{width: 25, height: 25}}/>
                                   <Typography sx={{color:"#424242"}}>{answerQuestion.user_firstname}</Typography>
                               </Stack>
-                              <div style={{display: 'flex'}}>
-                                  <IconButton>
-                                      <DeleteForeverIcon
-                                          sx={{fontSize: "18px", color: "red"}}
-                                          onClick={() => setDeleteAnswer(answerQuestion?.id)}
-                                      />
-                                  </IconButton>
-                                  <IconButton>
-                                      <EditIcon
-                                          sx={{fontSize:"18px",color:"#009688"}}
-                                          onClick={()=>setEditAnswer(answerQuestion)}
-                                      />
-                                  </IconButton>
-                              </div>
+                              {userInfo?.id === answerQuestion.user_id ?
+                                  <div style={{display: 'flex'}}>
+                                      <IconButton>
+                                          <DeleteForeverIcon
+                                              sx={{fontSize: "18px", color: "red"}}
+                                              onClick={() => setDeleteAnswer(answerQuestion?.id)}
+                                          />
+                                      </IconButton>
+                                      <IconButton>
+                                          <EditIcon
+                                              sx={{fontSize:"18px",color:"#009688"}}
+                                              onClick={()=>setEditAnswer(answerQuestion)}
+                                          />
+                                      </IconButton>
+                                  </div> : null
+                              }
+
 
                           </Box>
                           <Box display={'flex'} sx={{justifyContent: 'space-between', border: '1px solid #e0e0e0',padding:"5px 15px",borderTop:"none",marginBottom:"50px"}}>

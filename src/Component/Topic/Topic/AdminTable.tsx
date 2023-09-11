@@ -13,39 +13,32 @@ import {
     TableRow
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import React, {ChangeEvent, useEffect, useMemo, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useMemo, useState} from "react";
 import Paper from "@mui/material/Paper";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {DeleteTopic} from "./DeleteTopic";
 import {EditTopic} from "./EditTopic";
 import {AddTopic} from "./AddTopic";
-import {useGetUser} from "../../../Hook/User/useGetUser";
 import Spinner from "../../../Spinner/Spinner";
+import UserContext from "../../../Context/UserContext";
 
 
 export const AdminTable = () => {
     const {courseId} = useParams();
     const [searchName, setSearchName] = useState<string>("");
     const [deleteTopic, setDeleteTopic] = useState<ITopicGet | null>(null);
-    const [userId, setUserId] = useState<number | null>(null);
     const [editTopic, setEditTopic] = useState<ITopicGet | null>(null);
     const [addTopic, setAddTopic] = useState<ITopicGet[] | null>(null)
     const [topics, setTopics] = useState<any>([]);
     const [page, setPage] = useState(1);
-    const listUsersHook = useGetUser();
+    const {userInfo} = useContext(UserContext);
     const pageSize = 9;
 
     const handleChangePage = (event: ChangeEvent<any>, newPage: number,) => setPage(newPage);
 
-    const listTopicHook = useGetTopic(courseId, userId);
+    const listTopicHook = useGetTopic(courseId,userInfo?.id!);
 
-    useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
 
     useEffect(() => {
         if (listTopicHook?.data)

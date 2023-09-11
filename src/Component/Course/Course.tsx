@@ -42,9 +42,6 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
         refetch();
     }
 
-    console.log('userInfo', userInfo);
-
-
     return (
         <>
 
@@ -65,7 +62,7 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
                                 component="img"
                                 alt="تصویر عکس"
                                 height="140"
-                                image={course.image_uri ? course.image_uri : (require("../../Assets/images/net.jpg"))}
+                                image= {course.image_uri}
 
                             />
                             <CardContent>
@@ -84,27 +81,30 @@ export const Course: React.FunctionComponent<IProps> = (props) => {
                                             sx={{marginTop: "10px", marginBottom: "10px", whiteSpace: 'nowrap', marginRight: "5px"}}>اطلاعات
                                         بیشتر</Button>
                                 </Link>
+                                {userInfo?.roles?.length! > 1 ?
                                 <Link to={`/AdminTable/${course.id}`}>
                                     <Button size="small" variant="outlined" color="success"
                                             sx={{marginTop: "10px", marginBottom: "10px"}}>پنل ادمین</Button>
-                                </Link>
+                                </Link> : null
+                                }
                             </div>
 
 
-                            {
-                                userInfo?.roles[0] === 2 ?
-                                    <div>
-                                        <IconButton aria-label="edit" sx={{marginRight: "5px"}}>
-                                            <BorderColorIcon style={{color: "#009688"}}
-                                                             onClick={() => setEditCourse(course)}/>
-                                        </IconButton>
-                                        <IconButton aria-label="delete course">
-                                            <DeleteForeverIcon style={{color: "#CD1818"}}
-                                                               onClick={() => setDeleteCourse(course)}/>
-                                        </IconButton>
+                            {userInfo?.roles?.length! > 1?
+                                <div>
+                                    <IconButton aria-label="edit" sx={{marginRight: "5px"}}>
+                                        <BorderColorIcon style={{color: "#009688"}}
+                                                         onClick={() => setEditCourse(course)}/>
+                                    </IconButton>
+                                    <IconButton aria-label="delete course">
+                                        <DeleteForeverIcon style={{color: "#CD1818"}}
+                                                           onClick={() => setDeleteCourse(course)}/>
+                                    </IconButton>
 
+                                </div>
 
-                                    </div> : null}
+                                : null}
+
                         </CardActions>
                     </Card>
                 ))

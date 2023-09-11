@@ -7,44 +7,61 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import {useAddRoleToUser} from "../../Hook/RoleController/useAddRoleToUser";
 import Spinner from "../../Spinner/Spinner";
 import UIContext from "../../Context/UIContext";
-
+import UserContext from "../../Context/UserContext";
+import {useGetRoles} from "../../Hook/RoleController/useRoles";
 
 
 export const User = () => {
     const {changeTabIndex} = useContext(UIContext);
     const [searchName, setSearchName] = useState<string>("");
-    const [activeList, setActiveList] = useState<number[]>([])
-    const listUsersHook = useGetUser();
+    const [activeList, setActiveList] = useState<number[]>([]);
+    const [roleId,setRoleId]=useState<number>();
+    const {userInfo} = useContext(UserContext);
     const addRoleToUserHook = useAddRoleToUser();
+    const listUsersHook=useGetUser();
+    const listRolesHook= useGetRoles();
+
 
     useEffect(() => {
         changeTabIndex(2);
+
     }, [])
 
-    let users: IUser[] = [];
+    let users: IUser[]= [];
     if (listUsersHook.data?.length) {
-        users = listUsersHook.data;
+        users = listUsersHook?.data;
     }
+
+    useEffect(()=>{
+        if (listRolesHook?.data?.length)
+            listRolesHook?.data?.forEach((role)=>{
+                setRoleId(role?.id)
+            })
+    },[listRolesHook])
 
     useEffect(() => {
         let activeUsers: number[] = [];
 
         users?.forEach((user) => {
-            if (user.roles.includes(1))
-                activeUsers.push(user.id);
+            if (user.roles.length === 2)
+                activeUsers.push(user?.id!);
+            else
+                console.log('test')
 
             setActiveList(activeUsers);
         })
     }, [users])
 
+    console.log('users', users);
+
     const handleActive = (userId: any) => {
         const backup = [...activeList];
 
         try {
-            setActiveList([...activeList, userId]);
+            setActiveList([...activeList, userInfo?.id!]);
             addRoleToUserHook.mutate({
-                    userId: userId,
-                    roleId: 1,
+                    userId: userInfo?.id!,
+                    roleId: roleId!,
                 }
             );
         } catch (e) {
@@ -98,10 +115,10 @@ export const User = () => {
                                             <TableCell align="left">{user.name} </TableCell>
                                             <TableCell align="left">{user.sso}</TableCell>
                                             <TableCell align="left">
-                                                <IconButton disabled={activeList.includes(user.id)}>
+                                                <IconButton disabled={activeList.includes(user?.id!)}>
                                                     <HowToRegIcon
-                                                        style={{color: activeList.includes(user.id) ? 'green' : 'gray'}}
-                                                        onClick={() => handleActive(user.id)}
+                                                        style={{color: activeList.includes(user?.id!) ? 'green' : 'gray'}}
+                                                        onClick={() => handleActive(user?.id)}
                                                     />
                                                 </IconButton>
                                             </TableCell>
@@ -115,13 +132,6 @@ export const User = () => {
 
                     : (
                         <Spinner/>
-
-                        // <div style={{textAlign: "center", marginTop: "300px", height: "100vh"}}>
-                        //     <img style={{width: "450px", borderRadius: "25px"}}
-                        //          src={require("../../Assets/images/error-404-not-found-1024x512.png")}/>
-                        //     <h2 style={{color: "#9C27B0"}}>کاربر یافت نشد</h2>
-                        // </div>
-
 
                     )}
 

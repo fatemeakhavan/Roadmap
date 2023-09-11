@@ -1,10 +1,9 @@
 import{useEditAnswer} from "../../Hook/Answers/useEditAnswer";
 import {Box, Button, Dialog, TextField, Typography} from "@mui/material";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {IQuestion} from "../../Interface/Question.interface";
-import {useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {IAnswer} from "../../Interface/Answer.interface";
-import {useGetUser} from "../../Hook/User/useGetUser";
+import UserContext from "../../Context/UserContext";
 
 interface IProps{
     answerQuestion:IAnswer ;
@@ -15,16 +14,10 @@ interface IProps{
 export const EditAnswer=(props:IProps)=>{
 
     const{handleClose,answerQuestion,questionId}=props;
-    const [userId, setUserId] = useState<number | null>(null);
     const editAnswerHook=useEditAnswer();
-    const listUsersHook=useGetUser();
+    const {userInfo} = useContext(UserContext);
 
-    useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
+
 
     const {control, handleSubmit,formState:{errors}, setValue } = useForm<IAnswer>({
         defaultValues:{}
@@ -38,7 +31,7 @@ export const EditAnswer=(props:IProps)=>{
         editAnswerHook.mutate({
             context: data.context,
             id:answerQuestion.id,
-            user_id:userId,
+            user_id:userInfo?.id!,
             question_id:questionId!,
             callBack:handleClose
         });

@@ -58,7 +58,7 @@ export const ShowQuestion = (props: IProps) => {
                                 {question?.context}
 
                             </Typography>
-                            <div style={{display: 'flex'}}>
+                            <div style={{display: 'flex' , justifyContent: 'space-between',padding:"5px 15px"}}>
                                 <IconButton>
                                     <DeleteForeverIcon
                                         sx={{fontSize: "18px", color: "red"}}

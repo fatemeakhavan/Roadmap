@@ -11,7 +11,7 @@ export const useUpdateUserTopic=()=> {
         async (values: { user_id: number | null; topic_id:number | undefined; status:"DONE" | "IN_PROGRESS" | "SKIP" | "DEFAULT" ;callBack?: () => void }) => {
             const { user_id,topic_id,status } = values;
             console.log('user_id', user_id)
-            console.log('topic_id', topic_id)
+            console.log('topic_id',topic_id)
             return await RoadmapsQuery<IUserTopic>({
                 url: `/api/userTopic`,
                 params:{

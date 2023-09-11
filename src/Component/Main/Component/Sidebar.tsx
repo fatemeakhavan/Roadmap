@@ -9,9 +9,13 @@ import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import "./styles.css";
 import UIContext from "../../../Context/UIContext";
+import UserContext from "../../../Context/UserContext";
+
 
 const Sidebar=()=>{
     const {tabIndex} = useContext(UIContext);
+    const {userInfo} = useContext(UserContext);
+
 
     return(
         <Grid lg={2}>
@@ -26,6 +30,7 @@ const Sidebar=()=>{
                     </ListItemIcon>
                     <ListItemText primary="فهرست دوره ها" />
                 </ListItem>
+                {userInfo?.roles?.length! > 1 ?
                     <>
                         <ListItem button component={Link} to="/roles"className={`sidebar_hover ${tabIndex === 1 && 'selected'}`}>
                             <ListItemIcon>
@@ -40,6 +45,7 @@ const Sidebar=()=>{
                             <ListItemText primary="فهرست کاربران" />
                         </ListItem>
                     </>
+                    : null}
 
             </Drawer>
         </Grid>

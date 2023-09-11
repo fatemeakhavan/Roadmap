@@ -6,29 +6,62 @@ import "../styles.css";
 import ReactFlow, {Position, useEdgesState, useNodesState,} from 'reactflow';
 import {ITopicGet} from "../../../Interface/TopicGet.interface";
 import {useGetDescriptionByTopic} from "../../../Hook/Topic/useDescriptionByTopic";
-import {useGetUser} from "../../../Hook/User/useGetUser";
 import Spinner from "../../../Spinner/Spinner";
+import UserContext from "../../../Context/UserContext";
+import {useUserGetTopic} from "../../../Hook/UserTopic/usGetUserTopic";
+import {IUserTopic} from "../../../Interface/UserTopix.interface";
+import {useAddUserTopic} from "../../../Hook/UserTopic/useAddUserTopic";
+import {useUpdateUserTopic} from "../../../Hook/UserTopic/useEditUserTopic";
 
 
 export const Topic = () => {
     const {courseId} = useParams();
     const [nodeId, setNodeId] = useState<number | null>(0);
-    const [userId, setUserId] = useState<number | null>(null);
-    const getTopicHook = useGetTopic(courseId,userId);
+    const {userInfo} = useContext(UserContext);
+    const getTopicHook = useGetTopic(courseId,userInfo?.id!);
     const descriptionTopicHook = useGetDescriptionByTopic(nodeId)
-    const listUsersHook=useGetUser();
-
-
     const [nodes, setNodes] = useNodesState([]);
     const [edges, setEdges] = useEdgesState([]);
+    const [status, setStatus] = React.useState<any>("");
+
+
+    const getUserTopicHook= useUserGetTopic(nodeId!,userInfo?.id!);
+    let userTopic: IUserTopic | undefined;
+    if (getUserTopicHook.data) {
+        userTopic= getUserTopicHook.data;
+    }
+
+    const addUserTopicHook=useAddUserTopic();
+    const patchUserTopicHook=useUpdateUserTopic();
 
 
     useEffect(() => {
-        if (listUsersHook?.data?.length)
-            listUsersHook?.data?.forEach((user) => {
-                setUserId(user?.id)
-            })
-    }, [listUsersHook])
+        setStatus(userTopic?.status)
+    }, [userTopic?.status])
+
+
+    const handleChange = (event: { target: { value: React.SetStateAction<any>; }; }) => {
+        if(!userTopic?.status){
+
+            addUserTopicHook.mutate({
+                topic_id:nodeId!,
+                user_id:userInfo?.id!,
+                status:event.target.value,
+                callBack:getTopicHook.refetch
+            });
+        }
+
+        else{
+            patchUserTopicHook.mutate({
+                topic_id:nodeId!,
+                user_id:userInfo?.id!,
+                status:event.target.value,
+                callBack:getTopicHook.refetch
+            });
+        };
+        setStatus(event.target.value);
+
+    };
 
     let topics: ITopicGet[] = [];
     if (getTopicHook?.data) {
@@ -38,6 +71,7 @@ export const Topic = () => {
 
     const handleClose = () => {
         setNodeId(null);
+        setStatus(null)
         descriptionTopicHook.refetch();
     }
     const handleNodeClick = (event: any, node: any) => {
@@ -50,7 +84,6 @@ export const Topic = () => {
     }
 
     useEffect(() => {
-        console.log('triggered');
         const initialNodes: any[] = [];
         const initialEdges: any[] = [];
         const yValue = 60;
@@ -263,7 +296,7 @@ export const Topic = () => {
 
 
                     )}
-            {nodeId ? <DescriptionTopic topicId={nodeId} handleClose={handleClose} refetchUserTopic={getTopicHook.refetch}/> : null}
+            {nodeId ? <DescriptionTopic topicId={nodeId} handleClose={handleClose} onStatusChange={handleChange} status={status}/> : null}
 
         </>
 

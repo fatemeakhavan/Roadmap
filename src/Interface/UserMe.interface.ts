@@ -3,5 +3,5 @@ export interface IUserMe{
     sso:string;
     name:string;
     lastName:string;
-    roles:[number];
+    roles:number[];
 }
