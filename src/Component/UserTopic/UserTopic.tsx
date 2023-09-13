@@ -7,11 +7,11 @@ import Select from '@mui/material/Select';
 
 interface IProps{
     onStatusChange: any;
-    status:any;
+    statusOne:any;
 }
 
 export const UserTopic=(props:IProps)=> {
-    const{onStatusChange,status}=props;
+    const{onStatusChange,statusOne}=props;
 
     return (
         <Box sx={{ maxWidth: 160 }}>
@@ -20,7 +20,7 @@ export const UserTopic=(props:IProps)=> {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={status}
+                    value={statusOne}
                     label="status"
                     onChange={onStatusChange}
                 >

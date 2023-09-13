@@ -53,7 +53,7 @@ interface IProps {
     topicId: number;
     handleClose: () => void;
     onStatusChange:any;
-    status:any;
+    statusOne:any;
 }
 
 const questionPageSize = 4;
@@ -61,7 +61,7 @@ const commentPageSize = 6;
 
 export const DescriptionTopic=(props:IProps)=> {
 
-    const{topicId,handleClose,onStatusChange,status}=props;
+    const{topicId,handleClose,onStatusChange,statusOne}=props;
     const [value, setValue] = React.useState(0);
     const [questionId,setQuestionId]=React.useState<number>(0)
     const [questionPageNumber, setQuestionPageNumber] = useState(0);
@@ -144,7 +144,7 @@ export const DescriptionTopic=(props:IProps)=> {
 
                 <CustomTabPanel value={value} index={2}>
                     <div style={{textAlign:"center",marginBottom:"50px",marginRight:"65px",maxWidth:"500px"}}>
-                        <UserTopic  onStatusChange={onStatusChange} status={status}/>
+                        <UserTopic  onStatusChange={onStatusChange} statusOne={statusOne}/>
                     </div>
                     <Typography sx={{color:"grey",marginBottom:"50px",marginTop:"50px",maxWidth:"500px"}}>{description}</Typography>
                 </CustomTabPanel>

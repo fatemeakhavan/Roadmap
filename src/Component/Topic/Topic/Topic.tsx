@@ -22,7 +22,8 @@ export const Topic = () => {
     const descriptionTopicHook = useGetDescriptionByTopic(nodeId)
     const [nodes, setNodes] = useNodesState([]);
     const [edges, setEdges] = useEdgesState([]);
-    const [status, setStatus] = React.useState<any>("");
+    const [statusOne, setStatusOne] = React.useState<any>("");
+    const [isTrue,setIsTrue]=useState<boolean>(false);
 
 
     const getUserTopicHook= useUserGetTopic(nodeId!,userInfo?.id!);
@@ -36,22 +37,22 @@ export const Topic = () => {
 
 
     useEffect(() => {
-        setStatus(userTopic?.status)
+        setStatusOne(userTopic?.status)
     }, [userTopic?.status])
 
 
     const handleChange = (event: { target: { value: React.SetStateAction<any>; }; }) => {
-        if(!userTopic?.status){
-
+        if(!userTopic?.status && isTrue === false){
             addUserTopicHook.mutate({
                 topic_id:nodeId!,
                 user_id:userInfo?.id!,
                 status:event.target.value,
                 callBack:getTopicHook.refetch
             });
+            setIsTrue(true);
         }
 
-        else{
+        else if(userTopic?.status || isTrue=== true){
             patchUserTopicHook.mutate({
                 topic_id:nodeId!,
                 user_id:userInfo?.id!,
@@ -59,7 +60,7 @@ export const Topic = () => {
                 callBack:getTopicHook.refetch
             });
         };
-        setStatus(event.target.value);
+        setStatusOne(event.target.value);
 
     };
 
@@ -71,7 +72,7 @@ export const Topic = () => {
 
     const handleClose = () => {
         setNodeId(null);
-        setStatus(null)
+        setStatusOne("");
         descriptionTopicHook.refetch();
     }
     const handleNodeClick = (event: any, node: any) => {
@@ -288,15 +289,9 @@ export const Topic = () => {
                     : (
                         <Spinner/>
 
-                        // <div style={{textAlign: "center", marginTop: "300px", height: "100vh"}}>
-                        //     <img style={{width: "450px", borderRadius: "25px"}}
-                        //          src={require("../../../Assets/images/error-404-not-found-1024x512.png")}/>
-                        //     <h2 style={{color: "#9C27B0"}}>موضوعی یافت نشد</h2>
-                        // </div>
-
 
                     )}
-            {nodeId ? <DescriptionTopic topicId={nodeId} handleClose={handleClose} onStatusChange={handleChange} status={status}/> : null}
+            {nodeId ? <DescriptionTopic topicId={nodeId} handleClose={handleClose} onStatusChange={handleChange} statusOne={statusOne}/> : null}
 
         </>
 
